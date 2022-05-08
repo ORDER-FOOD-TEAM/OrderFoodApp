@@ -3,6 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/bg_button.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/bg_input_edit_text.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/bg_login.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/bg_white_circle.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/btn_login.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/ic_arrow_back.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable/ic_email.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/activity_forgot_password.xml" value="0.10989583333333333" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
       </map>
     </option>
