@@ -10,13 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
+            android:name=".activities.FillInformationActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.FillInformationActivity"
+            android:name=".activities.FoodDetailActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
