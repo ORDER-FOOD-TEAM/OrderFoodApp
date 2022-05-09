@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">OrderFoodApp</string>
+    <string name="edit_profile"><b>Profile</b></string>
 </resources>
