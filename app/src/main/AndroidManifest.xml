@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
+            android:name=".activities.OrderHistory"
+            android:exported="false" />
+        <activity
             android:name=".activities.MainMenuActivity"
             android:exported="false" />
         <activity
