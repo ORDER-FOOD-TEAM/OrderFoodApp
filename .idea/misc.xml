@@ -9,6 +9,8 @@
         <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.264" />
         <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_fill_information.xml" value="0.264" />
         <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_food_detail.xml" value="0.38006230529595014" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/fragment_filter_all_food.xml" value="0.1" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/fragment_filter_asian_food.xml" value="0.1" />
       </map>
     </option>
   </component>
