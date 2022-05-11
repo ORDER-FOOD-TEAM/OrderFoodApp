@@ -39,4 +39,8 @@
         <item>Female</item>
     </string-array>
     <string name="loading"><i>Please wait a minute, we are loading the newest food to bring the best experience to you</i></string>
+    <string name="current_balance">Current Balance</string>
+    <string name="current_balance_value"><b>$10000</b></string>
+    <string name="add_new_method">Add new method</string>
+    <string name="plus">+</string>
 </resources>
