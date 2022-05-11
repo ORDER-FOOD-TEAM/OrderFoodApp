@@ -5,9 +5,10 @@
       <map>
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
         <entry key="..\:/git/OrderFoodApp/app/src/main/res/drawable/bg_orange_radius.xml" value="0.124" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/font/poppins_light.xml" value="0.1" />
         <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.264" />
         <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_fill_information.xml" value="0.264" />
-        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_food_detail.xml" value="0.15081521739130435" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_food_detail.xml" value="0.38006230529595014" />
       </map>
     </option>
   </component>
