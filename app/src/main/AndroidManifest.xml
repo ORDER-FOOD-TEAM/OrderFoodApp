@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
+<<<<<<< HEAD
             android:name=".activities.CheckoutActivity"
             android:exported="true" >
             <intent-filter>
@@ -18,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+=======
+            android:name=".activities.CartActivity"
+            android:exported="true" />
+>>>>>>> 595f1e239fb864a37d99d86f3f8e55df35583860
         <activity
             android:name=".activities.CartActivity"
             android:exported="false"/>
@@ -28,6 +33,21 @@
             android:name=".activities.AboutUsActivity"
             android:exported="false" />
         <activity
+            android:name=".activities.FillInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FoodDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.PaymentMethod"
+            android:exported="false" />
+        <activity
+            android:name=".activities.OrderHistory"
+            android:exported="false" />
+        <activity
             android:name=".activities.MainMenuActivity"
             android:exported="false" />
         <activity
@@ -36,6 +56,19 @@
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
