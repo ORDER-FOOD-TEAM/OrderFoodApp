@@ -13,8 +13,8 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- * A simple [Fragment] subclass.
- * Use the [MainMenuFragment.newInstance] factory method to
+ *e A simple [Fragment] subclass.
+ * Use th [MainMenuFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class MainMenuFragment : Fragment() {

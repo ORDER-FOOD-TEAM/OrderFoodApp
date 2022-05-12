@@ -8,5 +8,5 @@
             <solid android:color="@color/orange_main" />
         </shape>
     </item>
-    <item android:drawable="@drawable/img_food" />
+<!--    <item android:drawable="@drawable/img_food" />-->
 </layer-list>
