@@ -1,4 +1,4 @@
-package com.example.orderfoodapp.activities
+package com.example.orderfoodapp.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,11 +13,11 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 /**
- *e A simple [Fragment] subclass.
- * Use th [MainMenuFragment.newInstance] factory method to
+ * A simple [Fragment] subclass.
+ * Use the [FavouriteFagment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MainMenuFragment : Fragment() {
+class FavouriteFagment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -35,7 +35,7 @@ class MainMenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_menu, container, false)
+        return inflater.inflate(R.layout.fragment_favourite, container, false)
     }
 
     companion object {
@@ -45,12 +45,12 @@ class MainMenuFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment MainMenuFragment.
+         * @return A new instance of fragment FavouriteFagment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            MainMenuFragment().apply {
+            FavouriteFagment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

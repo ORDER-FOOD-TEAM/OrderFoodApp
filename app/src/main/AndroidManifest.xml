@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
+            android:name=".activities.CartActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.BillDetailActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".activities.AboutUsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.FillInformationActivity"
             android:exported="false" />
         <activity
