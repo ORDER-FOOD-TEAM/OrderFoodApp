@@ -10,14 +10,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
-            android:name=".activities.AboutUsActivity"
+            android:name=".activities.BillDetailActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.AboutUsActivity"
+            android:exported="false"/>
         <activity
             android:name=".activities.MainMenuActivity"
             android:exported="false" />
@@ -27,15 +29,6 @@
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:exported="true">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
     </application>
 
 </manifest>
