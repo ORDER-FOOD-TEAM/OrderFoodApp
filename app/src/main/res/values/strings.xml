@@ -43,4 +43,10 @@
     <string name="current_balance_value"><b>$10000</b></string>
     <string name="add_new_method">Add new method</string>
     <string name="plus">+</string>
+    <string name="fill_info"><b>Fill your information</b></string>
+    <string name="name_info">Name</string>
+    <string name="address_info">Address</string>
+    <string name="phone_info">Phone number</string>
+    <string name="gender_info">Gender</string>
+    <string name="confirm_action">Confirm</string>
 </resources>

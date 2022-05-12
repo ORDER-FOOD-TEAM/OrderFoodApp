@@ -3,13 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/drawable/bg_white_circle.xml" value="0.137" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_forgot_password.xml" value="0.25815217391304346" />
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_main.xml" value="0.22826086956521738" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_order_history.xml" value="0.32654402102496716" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_payment_method.xml" value="0.2" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/activity_signup.xml" value="0.1265625" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/fragment_login.xml" value="0.1265625" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/drawable/bg_login.xml" value="0.1" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/drawable/bg_orange_radius.xml" value="0.124" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/font/poppins_light.xml" value="0.1" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.264" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_fill_information.xml" value="0.264" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_food_detail.xml" value="0.38006230529595014" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/fragment_filter_all_food.xml" value="0.1" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/fragment_filter_asian_food.xml" value="0.1" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/layout/fragment_login.xml" value="0.11302083333333333" />
+        <entry key="..\:/git/OrderFoodApp/app/src/main/res/menu/bottom_app_bar.xml" value="0.11302083333333333" />
       </map>
     </option>
   </component>
@@ -18,12 +23,5 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
-  </component>
-  <component name="VisualizationToolProject">
-    <option name="state">
-      <ProjectState>
-        <option name="scale" value="0.264" />
-      </ProjectState>
-    </option>
   </component>
 </project>
