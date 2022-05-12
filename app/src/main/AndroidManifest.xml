@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
+            android:name=".activities.FillInformationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.FoodDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.PaymentMethod"
             android:exported="false" />
         <activity
@@ -33,6 +42,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
