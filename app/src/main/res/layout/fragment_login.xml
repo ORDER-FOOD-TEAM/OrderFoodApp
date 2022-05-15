@@ -83,7 +83,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/facebook_view"
+                    android:id="@+id/facebook_login_button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="20sp"
