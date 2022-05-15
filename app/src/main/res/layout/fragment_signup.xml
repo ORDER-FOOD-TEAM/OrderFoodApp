@@ -6,7 +6,7 @@
     android:fadeScrollbars="true"
     android:isScrollContainer="true"
     android:orientation="vertical"
-    tools:context=".SignupFragment"
+    tools:context=".activities.MainActivity"
     tools:ignore="SpeakableTextPresentCheck">
 
     <EditText
