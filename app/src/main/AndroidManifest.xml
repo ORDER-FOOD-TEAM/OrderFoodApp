@@ -10,11 +10,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OrderFoodApp">
         <activity
+<<<<<<< HEAD
+            android:name=".activities.CheckoutActivity"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+=======
             android:name=".activities.CartActivity"
             android:exported="true" />
+>>>>>>> 595f1e239fb864a37d99d86f3f8e55df35583860
+        <activity
+            android:name=".activities.CartActivity"
+            android:exported="false"/>
         <activity
             android:name=".activities.BillDetailActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".activities.AboutUsActivity"
             android:exported="false" />
