@@ -92,12 +92,6 @@
                     app:backgroundTint="@color/white"
                     app:tint="@null" />
 
-                <com.facebook.login.widget.LoginButton
-                    android:id="@+id/facebookButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"/>
-
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/google_login_button"
                     android:layout_width="match_parent"
