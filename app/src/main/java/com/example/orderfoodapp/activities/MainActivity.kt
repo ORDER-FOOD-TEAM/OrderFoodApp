@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth;
+    private lateinit var loginViewPage: ViewPager2;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance();
 
         val authAdaptor = AuthAdaptor(this)
-        val loginViewPage = findViewById<ViewPager2>(R.id.login_view_pager);
+        loginViewPage = findViewById<ViewPager2>(R.id.login_view_pager);
         loginViewPage.adapter = authAdaptor;
 
         val loginTabLayout = findViewById<TabLayout>(R.id.login_tab_layout);
@@ -34,9 +35,14 @@ class MainActivity : AppCompatActivity() {
         }.attach()
     }
 
+    fun backToLoginFragment() {
+        loginViewPage.setCurrentItem(0, true);
+    }
+
     override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
+        mAuth.signOut()
         val currentUser = mAuth.currentUser
         Log.d("User", currentUser.toString())
         if (currentUser != null && currentUser.isEmailVerified) {

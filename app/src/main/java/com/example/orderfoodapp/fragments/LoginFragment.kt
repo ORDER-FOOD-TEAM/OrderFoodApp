@@ -1,25 +1,36 @@
 package com.example.orderfoodapp.fragments
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.content.IntentSender
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.os.HandlerThread
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
 import com.example.orderfoodapp.activities.MainMenuActivity
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.GoogleAuthProvider
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,8 +44,17 @@ private const val ARG_PARAM2 = "param2"
  */
 class LoginFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth;
+    private lateinit var oneTapClient: SignInClient;
+    private lateinit var signInRequest: BeginSignInRequest;
 
-    private var loginType = 0;
+    private val LOGIN_EMAIL_PASSWORD = 0;
+    private val LOGIN_GOOGLE = 1;
+    private val LOGIN_FACEBOOK = 2;
+
+    private val REQ_ONE_TAP_SUCCESS = 1000;
+    private var showOneTapUI = true;
+
+    private var loginType = LOGIN_EMAIL_PASSWORD;
 
     private lateinit var dialog: Dialog;
 
@@ -45,9 +65,9 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_login, container, false);
 
-        var btnLogin = requireView().findViewById<Button>(R.id.login_button);
-        var btnGoogleLogin = requireView().findViewById<Button>(R.id.google_login_button);
-        var btnFacebookLogin = requireView().findViewById<Button>(R.id.facebook_login_button);
+        var btnLogin = view.findViewById<Button>(R.id.login_button);
+        var btnGoogleLogin = view.findViewById<FloatingActionButton>(R.id.google_login_button);
+        var btnFacebookLogin = view.findViewById<FloatingActionButton>(R.id.facebook_login_button);
 
         //init loading dialog
         dialog = Dialog(requireContext());
@@ -57,6 +77,12 @@ class LoginFragment : Fragment() {
         btnLogin.setOnClickListener() {
             dialog.show();
             loginUser();
+        }
+
+        btnGoogleLogin.setOnClickListener() {
+            loginType = LOGIN_GOOGLE;
+            createGoogleRequest();
+//            signInByGoogle();
         }
 
         return view;
@@ -135,6 +161,99 @@ class LoginFragment : Fragment() {
         }
     }
 
+    private fun createGoogleRequest() {
+        oneTapClient = Identity.getSignInClient(requireActivity());
+        signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(getString(R.string.default_web_client_id))
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+            )
+            .build()
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener(requireActivity()) { result ->
+                try {
+                    loginResultHandler.launch(
+                        IntentSenderRequest
+                            .Builder(result.pendingIntent.intentSender).build()
+                    )
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.e("One Tap UI", "Couldn't start One Tap UI: ${e.localizedMessage}")
+                }
+            }
+            .addOnFailureListener(requireActivity()) { e ->
+                Log.d("One Tap UI", e.localizedMessage)
+            }
+    }
+
+    private var loginResultHandler: ActivityResultLauncher<IntentSenderRequest> =
+        registerForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) { result ->
+            run {
+                if (result.resultCode == Activity.RESULT_OK) {
+                    try {
+                        val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
+                        val idToken = credential.googleIdToken
+                        when {
+                            idToken != null -> {
+                                // Got an ID token from Google. Use it to authenticate
+                                // with your backend.
+                                val firebaseCredential =
+                                    GoogleAuthProvider.getCredential(idToken, null);
+                                var user = mAuth.currentUser;
+                                mAuth.signInWithCredential(firebaseCredential)
+                                    .addOnCompleteListener(requireActivity()) { task ->
+                                        if (task.isSuccessful) {
+                                            // Sign in success, update UI with the signed-in user's information
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Sign in success",
+                                                Toast.LENGTH_SHORT
+                                            ).show();
+                                            Log.d(
+                                                "Sign in with google",
+                                                "signInWithCredential:success"
+                                            )
+                                        } else {
+                                            // If sign in fails, display a message to the user.
+                                            Log.w(
+                                                "Sign in with google",
+                                                "signInWithCredential:failure",
+                                                task.exception
+                                            )
+                                        }
+                                    }
+                                mAuth.signOut();
+                            }
+                            else -> {
+                                // Shouldn't happen.
+                                Log.d("Credential", "No ID token or password!")
+                            }
+                        }
+                    } catch (e: ApiException) {
+                        when (e.statusCode) {
+                            CommonStatusCodes.CANCELED -> {
+                                Log.d("Api Exception", "One-tap dialog was closed.")
+                                // Don't re-prompt the user.
+                                showOneTapUI = false
+                            }
+                            CommonStatusCodes.NETWORK_ERROR -> {
+                                Log.d("Api Exception", "One-tap encountered a network error.")
+                                // Try again or just ignore.
+                            }
+                            else -> {
+                                Log.d(
+                                    "Api Exception", "Couldn't get credential from result." +
+                                            " (${e.localizedMessage})"
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
     private fun notifyLoginSuccessAndStartActivity() {
         if (dialog.isShowing) {
             dialog.dismiss();
@@ -150,3 +269,4 @@ class LoginFragment : Fragment() {
         startActivity(intent)
     }
 }
+
