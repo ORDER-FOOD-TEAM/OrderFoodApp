@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "871239528990",
+    "firebase_url": "https://orderfoodapp-6dba4-default-rtdb.firebaseio.com",
     "project_id": "orderfoodapp-6dba4",
     "storage_bucket": "orderfoodapp-6dba4.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "871239528990-vnf1p9gernh4sggndq7thgkh54dfgmfb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.orderfoodapp",
+            "certificate_hash": "4b78c96ace2dd59d55f730bb624d4cc05836b9a5"
+          }
+        },
         {
           "client_id": "871239528990-bhdf6no0ljl1i5qpp9m9kpftvi30hak9.apps.googleusercontent.com",
           "client_type": 3

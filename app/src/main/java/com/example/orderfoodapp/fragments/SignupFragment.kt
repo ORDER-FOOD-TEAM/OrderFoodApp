@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.orderfoodapp.R
+import com.example.orderfoodapp.activities.MainActivity
 import com.example.orderfoodapp.models.Customer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -45,7 +46,7 @@ class SignupFragment : Fragment() {
 
         var btnSignup = view.findViewById<Button>(R.id.btnSignup);
         btnSignup.setOnClickListener() {
-
+            createUser()
         }
         return view;
     }
@@ -96,15 +97,18 @@ class SignupFragment : Fragment() {
                             SIGNUP_PASSWORD = password;
 
                             Toast.makeText(
-                                requireActivity(),
+                                requireContext(),
                                 "User sign up successfully, please check mail to verify account!",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            (requireActivity() as MainActivity).backToLoginFragment();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("Signup user", "createUserWithEmail:failure", task.exception)
                             Toast.makeText(
-                                requireActivity(), "Signup failed.",
+
+                                requireContext(), "Signup failed. ${task.exception?.message}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
