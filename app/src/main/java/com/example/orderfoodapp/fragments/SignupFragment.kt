@@ -28,6 +28,12 @@ private const val ARG_PARAM2 = "param2"
 class SignupFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth;
 
+    //Signup email and password
+    companion object {
+        var SIGNUP_EMAIL = ""
+        var SIGNUP_PASSWORD = ""
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -86,8 +92,14 @@ class SignupFragment : Fragment() {
 
                             createCustomerData(email);
 
-                            Toast.makeText(requireActivity(), "User sign up successfully, please check mail to verify account!",
-                                Toast.LENGTH_SHORT).show()
+                            SIGNUP_EMAIL = email;
+                            SIGNUP_PASSWORD = password;
+
+                            Toast.makeText(
+                                requireActivity(),
+                                "User sign up successfully, please check mail to verify account!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("Signup user", "createUserWithEmail:failure", task.exception)
