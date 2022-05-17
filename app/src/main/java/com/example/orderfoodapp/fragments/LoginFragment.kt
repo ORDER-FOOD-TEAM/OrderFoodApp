@@ -22,25 +22,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
 import com.example.orderfoodapp.activities.MainMenuActivity
-import com.facebook.AccessToken
-import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
+import com.facebook.*
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import org.json.JSONException
+import org.json.JSONObject
 import java.util.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -51,6 +50,7 @@ class LoginFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth;
     private lateinit var oneTapClient: SignInClient;
     private lateinit var signInRequest: BeginSignInRequest;
+    private lateinit var callbackManager: CallbackManager;
 
     private lateinit var dialog: Dialog;
 
@@ -70,27 +70,9 @@ class LoginFragment : Fragment() {
         dialog.setContentView(R.layout.dialog_loading_login);
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
 
-        //Variable need in login facebook method
-        val callbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(callbackManager,
-            object : FacebookCallback<LoginResult> {
-                override fun onSuccess(result: LoginResult) {
-                    handleFacebookAccessToken(result.accessToken);
-                    Log.d("Success", "Login")
-                }
-
-                override fun onCancel() {
-                    Toast.makeText(context, "Login Cancel", Toast.LENGTH_LONG).show()
-                }
-
-                override fun onError(error: FacebookException) {
-                    Toast.makeText(context, error.message, Toast.LENGTH_LONG).show()
-                }
-            })
+        configLoginFacebookManager();
 
         btnLogin.setOnClickListener {
-            dialog.show();
             loginUser();
         }
 
@@ -126,7 +108,10 @@ class LoginFragment : Fragment() {
         }
     }
 
+    //Login with email and password
     private fun loginUser() {
+        dialog.show();
+
         val edtEmail = requireView().findViewById<EditText>(R.id.email_editText);
         val edtPassword = requireView().findViewById<EditText>(R.id.password_editText);
 
@@ -145,75 +130,37 @@ class LoginFragment : Fragment() {
             }
 
             else -> {
-                mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(requireActivity()) { task ->
-                        if (task.isSuccessful) {
-                            val user = mAuth.currentUser
-                            if (user?.isEmailVerified == false) {
-                                user.sendEmailVerification()
-
-                                if (dialog.isShowing) {
-                                    dialog.dismiss()
-                                }
-                                Toast.makeText(
-                                    requireActivity(),
-                                    "Please check mail and verify your account!",
-                                    Toast.LENGTH_LONG
-                                ).show()
-
-                            } else {
-                                //set delay for smooth animation
-                                Handler(Looper.getMainLooper()).postDelayed({
-                                    notifyLoginSuccessAndStartActivity()
-                                }, 2500);
-                            }
-                        } else {
-                            if (dialog.isShowing) {
-                                dialog.dismiss()
-                            }
-                            android.widget.Toast.makeText(
-                                requireActivity(),
-                                "Login Error: " + task.exception,
-                                android.widget.Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                signInWithEmailAndPasswordFirebase(email, password);
             }
         }
     }
 
+    //Login google
     private fun signInGoogle() {
-//        oneTapClient = Identity.getSignInClient(requireActivity());
-//        signInRequest = BeginSignInRequest.builder()
-//            .setGoogleIdTokenRequestOptions(
-//                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                    .setSupported(true)
-//                    .setServerClientId(getString(R.string.default_web_client_id))
-//                    .setFilterByAuthorizedAccounts(false)
-//                    .build()
-//            )
-//            .build()
-//        oneTapClient.beginSignIn(signInRequest)
-//            .addOnSuccessListener(requireActivity()) { result ->
-//                try {
-//                    loginResultHandler.launch(
-//                        IntentSenderRequest
-//                            .Builder(result.pendingIntent.intentSender).build()
-//                    )
-//                } catch (e: IntentSender.SendIntentException) {
-//                    Log.e("One Tap UI", "Couldn't start One Tap UI: ${e.localizedMessage}")
-//                }
-//            }
-//            .addOnFailureListener(requireActivity()) { e ->
-//                Log.d("One Tap UI", e.printStackTrace().toString())
-//            }
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
+        oneTapClient = Identity.getSignInClient(requireActivity());
+        signInRequest = BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId(getString(R.string.default_web_client_id))
+                    .setFilterByAuthorizedAccounts(false)
+                    .build()
+            )
             .build()
-
-        var googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        val signInIntent = googleSignInClient.signInIntent;
+        oneTapClient.beginSignIn(signInRequest)
+            .addOnSuccessListener(requireActivity()) { result ->
+                try {
+                    loginResultHandler.launch(
+                        IntentSenderRequest
+                            .Builder(result.pendingIntent.intentSender).build()
+                    )
+                } catch (e: IntentSender.SendIntentException) {
+                    Log.e("One Tap UI", "Couldn't start One Tap UI: ${e.localizedMessage}")
+                }
+            }
+            .addOnFailureListener(requireActivity()) { e ->
+                Log.d("One Tap UI", e.printStackTrace().toString())
+            }
     }
 
     private
@@ -223,14 +170,15 @@ class LoginFragment : Fragment() {
                 try {
                     val credential =
                         oneTapClient.getSignInCredentialFromIntent(result.data)
-                    val idToken = credential.googleIdToken
+                    val idToken = credential.googleIdToken;
+                    val email = credential.id;
                     when {
                         idToken != null -> {
                             // Got an ID token from Google. Use it to authenticate
                             // with your backend.
                             val firebaseCredential =
                                 GoogleAuthProvider.getCredential(idToken, null);
-                            signInWithCredentialFirebase(firebaseCredential)
+                            signInWithCredentialFirebase(firebaseCredential, email)
                         }
                         else -> {
                             // Shouldn't happen.
@@ -260,22 +208,63 @@ class LoginFragment : Fragment() {
             }
         };
 
-    private fun handleFacebookAccessToken(token: AccessToken) {
-        Log.d("FB Token", "handleFacebookAccessToken:$token")
+    //Login facebook
+    private fun configLoginFacebookManager() {
+        callbackManager = CallbackManager.Factory.create();
 
-        val credential = FacebookAuthProvider.getCredential(token.token)
-        signInWithCredentialFirebase(credential);
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult) {
+                    val email = getDataFacebookLogin(result.accessToken);
+                    handleFacebookAccessToken(result.accessToken, email);
+                    Log.d("Success", "Login")
+                }
+
+                override fun onCancel() {
+                    Toast.makeText(context, "Login Cancel", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onError(error: FacebookException) {
+                    Toast.makeText(context, error.message, Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
-    private fun signInWithCredentialFirebase(credential: AuthCredential) {
+    private fun handleFacebookAccessToken(token: AccessToken, email: String) {
+        Log.d("FB Token", "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token.token);
+        signInWithCredentialFirebase(credential, email);
+    }
+
+    private fun getDataFacebookLogin(token: AccessToken): String {
+        lateinit var email: String;
+        val request = GraphRequest.newMeRequest(
+            token
+        ) { obj, response ->
+            val json = response?.jsonObject;
+            try {
+                if (json != null) {
+                    email = json.getString("email")
+                }
+            } catch (e: JSONException) {
+            }
+        }
+        return email;
+    }
+
+    //Sign in to firebase
+    private fun signInWithCredentialFirebase(credential: AuthCredential, email: String) {
+        dialog.show();
+
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
-                    notifyLoginSuccessAndStartActivity();
                     Log.d(
                         "Sign in",
                         "signInWithCredential:success"
                     )
+                    createUserIfNotExists(email);
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(
@@ -288,10 +277,47 @@ class LoginFragment : Fragment() {
             }
     }
 
+    private fun signInWithEmailAndPasswordFirebase(email: String, password: String) {
+        mAuth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val user = mAuth.currentUser
+                    if (user?.isEmailVerified == false) {
+                        user.sendEmailVerification()
+
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
+                        }
+                        Toast.makeText(
+                            requireActivity(),
+                            "Please check mail and verify your account!",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                    } else {
+                        notifyLoginSuccessAndStartActivity();
+                    }
+                } else {
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                    android.widget.Toast.makeText(
+                        requireActivity(),
+                        "Login Error: " + task.exception,
+                        android.widget.Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+    }
+
+    //Utils
     private fun notifyLoginSuccessAndStartActivity() {
-        if (dialog.isShowing) {
-            dialog.dismiss();
-        }
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (dialog.isShowing) {
+                dialog.dismiss();
+            }
+        }, 1500);
+
         // Sign in success, update UI with the signed-in user's information
         Toast.makeText(
             requireActivity(),
@@ -301,6 +327,26 @@ class LoginFragment : Fragment() {
         val intent =
             Intent(requireActivity(), MainMenuActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun createUserIfNotExists(email: String) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Customer");
+        val query = dbRef.orderByChild("email").equalTo(email);
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists())
+                    notifyLoginSuccessAndStartActivity();
+                else {
+                    SignupFragment.createCustomerData(email);
+                    notifyLoginSuccessAndStartActivity();
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 }
 

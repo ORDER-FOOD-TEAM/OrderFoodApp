@@ -33,6 +33,20 @@ class SignupFragment : Fragment() {
     companion object {
         var SIGNUP_EMAIL = ""
         var SIGNUP_PASSWORD = ""
+
+        fun createCustomerData(email: String) {
+            val dbRef = FirebaseDatabase.getInstance().getReference("Customer");
+            val newUser = Customer(
+                "",
+                10000,
+                "",
+                email,
+                "",
+                "",
+                ""
+            )
+            dbRef.push().setValue(newUser);
+        }
     }
 
     override fun onCreateView(
@@ -115,19 +129,5 @@ class SignupFragment : Fragment() {
                     }
             }
         }
-    }
-
-    private fun createCustomerData(email: String) {
-        val dbRef = FirebaseDatabase.getInstance().getReference("Customer");
-        val newUser = Customer(
-            "",
-            10000,
-            "",
-            email,
-            "",
-            "",
-            ""
-        )
-        dbRef.push().setValue(newUser);
     }
 }
