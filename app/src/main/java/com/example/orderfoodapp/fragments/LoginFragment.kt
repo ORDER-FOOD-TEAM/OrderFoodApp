@@ -72,6 +72,8 @@ class LoginFragment : Fragment() {
 
         configLoginFacebookManager();
 
+        mAuth = FirebaseAuth.getInstance();
+
         btnLogin.setOnClickListener {
             loginUser();
         }
