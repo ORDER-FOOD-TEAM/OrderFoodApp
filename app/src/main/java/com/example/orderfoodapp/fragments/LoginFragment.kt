@@ -72,6 +72,8 @@ class LoginFragment : Fragment() {
 
         configLoginFacebookManager();
 
+        mAuth = FirebaseAuth.getInstance();
+
         btnLogin.setOnClickListener {
             loginUser();
         }
@@ -282,8 +284,9 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     val user = mAuth.currentUser
+
                     if (user?.isEmailVerified == false) {
-                        user.sendEmailVerification()
+
 
                         if (dialog.isShowing) {
                             dialog.dismiss()
