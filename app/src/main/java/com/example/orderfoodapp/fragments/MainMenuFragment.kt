@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
 
 class MainMenuFragment : Fragment() {
+
+    private val PLACE_PICKER_REQUEST = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
