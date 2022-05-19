@@ -64,6 +64,12 @@ dependencies {
     // Also declare the dependency for the Google Play services library and specify its version
     implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
+    //google map
+    implementation 'com.google.maps:google-maps-services:0.2.5'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    
     implementation 'com.facebook.android:facebook-login:latest.release'
 }
 
