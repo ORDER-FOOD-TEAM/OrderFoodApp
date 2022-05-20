@@ -1,6 +1,7 @@
 package com.example.orderfoodapp.fragments
 
 import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Address
@@ -14,6 +15,10 @@ import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.adevinta.leku.LATITUDE
+import com.adevinta.leku.LOCATION_ADDRESS
+import com.adevinta.leku.LONGITUDE
+import com.adevinta.leku.LocationPickerActivity
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.orderfoodapp.R
@@ -21,10 +26,10 @@ import com.example.orderfoodapp.adapters.DishAdapter
 import com.example.orderfoodapp.adapters.NewsAdapter
 import com.example.orderfoodapp.models.Dish
 import com.example.orderfoodapp.models.NewsItem
+import com.example.orderfoodapp.util.EstimateTime
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_main_menu.*
 import java.util.*
 
@@ -162,7 +167,29 @@ class MainMenuFragment : Fragment() {
         }
 
         location_button.setOnClickListener() {
-            //not done
+            showMap()
+        }
+    }
+
+    private fun showMap() {
+        val locationPickerIntent = LocationPickerActivity.Builder()
+            .withLocation(curLat, curLon)
+            .withGooglePlacesApiKey("AIzaSyCX19-6alLJB1jznKTALsmaWQ2FkoKutA8")
+            .withSearchZone("vi-VN")
+            .build(requireContext())
+
+        startActivityForResult(locationPickerIntent, PLACE_PICKER_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            if (requestCode == 1) {
+                curLat = data.getDoubleExtra(LATITUDE, 0.0)
+                curLon = data.getDoubleExtra(LONGITUDE, 0.0)
+                curAddress = data.getStringExtra(LOCATION_ADDRESS).toString()
+                if(curAddress.isEmpty())
+                    convertLocationFromCoordination()
+            }
         }
     }
 
@@ -230,9 +257,9 @@ class MainMenuFragment : Fragment() {
         allFood_icon.setColorFilter(Color.parseColor("#838383"))
         allFood_textView.setTextColor(Color.parseColor("#838383"))
 
-        western_button.setBackgroundResource(R.drawable.bg_borderless_edit_text)
-        pizza_icon.setColorFilter(Color.parseColor("#838383"))
-        pizza_textView.setTextColor(Color.parseColor("#838383"))
+//        western_button.setBackgroundResource(R.drawable.bg_borderless_edit_text)
+//        pizza_icon.setColorFilter(Color.parseColor("#838383"))
+//        pizza_textView.setTextColor(Color.parseColor("#838383"))
 
         beverages_button.setBackgroundResource(R.drawable.bg_borderless_edit_text)
         beverages_icon.setColorFilter(Color.parseColor("#838383"))
@@ -281,25 +308,142 @@ class MainMenuFragment : Fragment() {
     }
 
     private fun estimateTime() {
-//        val dbRef = FirebaseDatabase.getInstance().getReference("Provider")
-//        dbRef.addValueEventListener(object: ValueEventListener {
-//            override fun onDataChange(snapshot: DataSnapshot) {
-//                for (data in snapshot.children) {
-//                    val prLocation = data.child("location").value as String
-//                    convertLocationFromAddress(prLocation)
-//                    val est = EstimateTime()
-//                    val deliveryTime = est.estimateTime(curLat, curLon, providerLat, providerLon)
-//                    map[data.key.toString()] = deliveryTime
-//                }
-//                loadData()
-//            }
-//
-//            override fun onCancelled(error: DatabaseError) { //null }
-//        })
+        val dbRef = FirebaseDatabase.getInstance().getReference("Provider")
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(data in snapshot.children) {
+                    val prLocation = data.child("location").value as String
+                    convertLocationFromAddress(prLocation)
+
+                    val est = EstimateTime()
+                    val deliveryTime = est.estimateTime(curLat, curLon, providerLat, providerLon)
+                    map[data.key.toString()] = deliveryTime
+                }
+                loadData()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //null
+            }
+        })
+    }
+
+    private fun loadData() {
+        //get database
+        database = FirebaseDatabase.getInstance()
+        ref = database.getReference("Product")
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //clear all products in the lists to add new data
+                listDish.clear()
+                dishAdapterNearestRestaurants.deleteAll()
+                dishAdapterTopRating.deleteAll()
+                dishAdapterOnSale.deleteAll()
+
+                //add new data in the snapshot
+                for (data in snapshot.children) {
+                    val prName = data.child("provider").value as String
+                    if(map.containsKey(prName)) {
+                        val deliveryTime = map[prName]
+
+                        var priceS = 0.0
+                        val a: Any = data.child("priceS").value as Any
+                        val typeA = a::class.simpleName
+                        if(typeA == "Long" || typeA == "Double")
+                            priceS = a.toString().toDouble()
+
+                        var priceM = 0.0
+                        val b: Any = data.child("priceM").value as Any
+                        val typeB = b::class.simpleName
+                        if(typeB == "Long" || typeB == "Double")
+                            priceM = b.toString().toDouble()
+
+                        var priceL = 0.0
+                        val c: Any = data.child("priceL").value as Any
+                        val typeC = c::class.simpleName
+                        if(typeC == "Long" || typeC == "Double")
+                            priceL = c.toString().toDouble()
+
+                        val dish = Dish(
+                            data.child("id").value as String,
+                            data.child("name").value as String,
+                            priceS,
+                            priceM,
+                            priceL,
+                            data.child("rated").value as String,
+                            deliveryTime!!,
+                            data.child("category").value as String,
+                            data.child("description").value as String,
+                            data.child("salePercent").value as Long,
+                            data.child("provider").value as String,
+                            data.child("amountS").value as Long,
+                            data.child("amountSsold").value as Long,
+                            data.child("amountM").value as Long,
+                            data.child("amountMsold").value as Long,
+                            data.child("amountL").value as Long,
+                            data.child("amountLsold").value as Long,
+                        )
+                        listDish.add(dish)
+                    }
+                }
+
+                loadDataNearestRestaurant()
+                loadDataTopRating()
+                loadDataOnSale()
+
+                //save value from list dish
+                KotlinConstantClass.COMPANION_OBJECT_LIST_DISH = listDish
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //null
+            }
+        })
+    }
+
+    private fun loadDataNearestRestaurant() {
+        for(item in listDish) {
+            if(item.deliveryTime == "Closely")
+                dishAdapterNearestRestaurants.addDish(item)
+        }
+    }
+
+    private fun loadDataTopRating() {
+        for(item in listDish)
+            dishAdapterTopRating.addDishTopRating(item)
+    }
+
+    private fun loadDataOnSale() {
+        for(item in listDish) {
+            if(item.salePercent != 0.toLong())
+                dishAdapterOnSale.addDish(item)
+        }
+    }
+
+    private fun convertLocationFromAddress(myLocation: String) {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        try {
+            val addresses: List<Address> = geocoder.getFromLocationName(myLocation, 1)
+            val address: Address = addresses[0]
+            providerLat = address.latitude
+            providerLon = address.longitude
+        }
+        catch (e: Exception) {
+            Toast.makeText(context, "Issue with gps, try later!", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun convertLocationFromCoordination() {
-
+        val geocoder = Geocoder(context, Locale.getDefault())
+        try {
+            val addresses: List<Address> = geocoder.getFromLocation(curLat, curLon, 1)
+            val address = addresses[0].getAddressLine(0)
+            curAddress = address
+        }
+        catch (e: Exception) {
+            Toast.makeText(context, "Issue with GPS, try later!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showNews() {

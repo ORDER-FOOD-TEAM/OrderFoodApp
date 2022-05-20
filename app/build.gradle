@@ -71,6 +71,11 @@ dependencies {
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     
     implementation 'com.facebook.android:facebook-login:latest.release'
+
+    implementation ('com.adevinta.android:leku:9.1.4') {
+        exclude group: 'com.google.android.gms'
+        exclude group: 'androidx.appcompat'
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
