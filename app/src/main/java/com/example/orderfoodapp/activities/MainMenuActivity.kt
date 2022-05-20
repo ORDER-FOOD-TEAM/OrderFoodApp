@@ -39,7 +39,7 @@ class MainMenuActivity : AppCompatActivity() {
 
         customerEmail = Firebase.auth.currentUser?.email.toString()
 
-        checkFullFillInformation()
+        //checkFullFillInformation()
 
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_container, mainMenuFragment)
