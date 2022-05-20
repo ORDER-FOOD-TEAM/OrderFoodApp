@@ -15,12 +15,6 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/navbottombar_menu"
-        android:title="Chat"
-        android:enabled="true"
-        app:showAsAction="ifRoom" />
-
-    <item
         android:id="@+id/navbottombar_profile"
         android:title="Profile"
         android:enabled="true"

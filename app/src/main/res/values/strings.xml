@@ -52,4 +52,5 @@
     <string name="facebook_app_id">336674361732048</string>
     <string name="fb_login_protocol_scheme">fb336674361732048</string>
     <string name="facebook_client_token">053f2192e5a7989e6d799ba7b59c6a11</string>
+    <string name="new_s_title">New\'s title</string>
 </resources>
