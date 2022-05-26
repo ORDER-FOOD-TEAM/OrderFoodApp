@@ -54,6 +54,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginEnd="24dp"
                         android:text="242 ST Marks Eve, Finland"
+                        android:hint="Choose a specific location"
                         android:textSize="14dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

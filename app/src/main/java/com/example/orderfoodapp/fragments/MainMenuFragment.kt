@@ -1,6 +1,7 @@
 package com.example.orderfoodapp.fragments
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -61,6 +62,8 @@ class MainMenuFragment : Fragment() {
 
     private var listDish = ArrayList<Dish>()
 
+    private lateinit var dialog: Dialog
+
     class KotlinConstantClass {
         companion object {
             var COMPANION_OBJECT_ADDRESS = ""
@@ -70,6 +73,10 @@ class MainMenuFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        dialog = Dialog(requireContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_loading_menu)
+        dialog.show()
 
         map = HashMap()
         fusedLocationProvider = LocationServices.getFusedLocationProviderClient(context as Activity)
@@ -175,7 +182,17 @@ class MainMenuFragment : Fragment() {
         val locationPickerIntent = LocationPickerActivity.Builder()
             .withLocation(curLat, curLon)
             .withGooglePlacesApiKey("AIzaSyCX19-6alLJB1jznKTALsmaWQ2FkoKutA8")
+            .withGeolocApiKey("AIzaSyCX19-6alLJB1jznKTALsmaWQ2FkoKutA8")
             .withSearchZone("vi-VN")
+            .withDefaultLocaleSearchZone()
+            .shouldReturnOkOnBackPressed()
+            .withStreetHidden()
+            .withCityHidden()
+            .withZipCodeHidden()
+            .withSatelliteViewHidden()
+            .withGoogleTimeZoneEnabled()
+            .withVoiceSearchHidden()
+            .withUnnamedRoadHidden()
             .build(requireContext())
 
         startActivityForResult(locationPickerIntent, PLACE_PICKER_REQUEST)
@@ -189,6 +206,11 @@ class MainMenuFragment : Fragment() {
                 curAddress = data.getStringExtra(LOCATION_ADDRESS).toString()
                 if(curAddress.isEmpty())
                     convertLocationFromCoordination()
+            }
+            else if (requestCode == 2) {
+                curLat = data.getDoubleExtra(LATITUDE, 0.0)
+                curLon = data.getDoubleExtra(LONGITUDE, 0.0)
+                curAddress = data.getStringExtra(LOCATION_ADDRESS).toString()
             }
         }
     }
@@ -272,15 +294,15 @@ class MainMenuFragment : Fragment() {
 
     private fun getLocation () {
         val task = fusedLocationProvider.lastLocation
-        //to ask for permission when it is not granted
-        if(ActivityCompat.checkSelfPermission(
+        //to check whether the request is granted
+        if (ActivityCompat.checkSelfPermission(
                 context as Activity,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 context as Activity,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED) {
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             ActivityCompat.requestPermissions(
                 context as Activity,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
@@ -288,22 +310,21 @@ class MainMenuFragment : Fragment() {
             )
             return
         }
-
         task.addOnSuccessListener {
             val location = it
             if(location != null) {
                 val geocoder = Geocoder(context, Locale.getDefault())
                 val address: List<Address> = geocoder.getFromLocation(
-                    location.latitude, location.longitude, 1
-                )
+                    location.latitude, location.longitude, 1)
                 curLat = address[0].latitude
                 curLon = address[0].longitude
                 curAddress = address[0].getAddressLine(0)
                 location_textView.text = curAddress
                 KotlinConstantClass.COMPANION_OBJECT_ADDRESS = curAddress
             }
-            else
-                Toast.makeText(context, "Cannot get current location!", Toast.LENGTH_SHORT).show()
+            else {
+                Toast.makeText(context, "Cannot get current location! Using default...", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -394,6 +415,10 @@ class MainMenuFragment : Fragment() {
 
                 //save value from list dish
                 KotlinConstantClass.COMPANION_OBJECT_LIST_DISH = listDish
+
+                if(dialog.isShowing) {
+                    dialog.dismiss()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
