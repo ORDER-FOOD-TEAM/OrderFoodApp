@@ -294,6 +294,7 @@ class MainMenuFragment : Fragment() {
 
     private fun getLocation () {
         val task = fusedLocationProvider.lastLocation
+        //to check whether the request is granted
         if (ActivityCompat.checkSelfPermission(
                 context as Activity,
                 android.Manifest.permission.ACCESS_FINE_LOCATION
