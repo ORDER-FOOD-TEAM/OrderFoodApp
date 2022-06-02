@@ -1,19 +1,25 @@
 package com.example.orderfoodapp.activities
 
+import android.app.Dialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.transition.Fade
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.orderfoodapp.R
 import com.example.orderfoodapp.fragments.MainMenuFragment
+import com.example.orderfoodapp.models.CreateBillItem
 import com.example.orderfoodapp.models.Dish
+import com.example.orderfoodapp.models.PushBillItem
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -44,6 +50,8 @@ class FoodDetailActivity : AppCompatActivity() {
 
     private var keyFav = "none"
     private var isFav = false
+
+
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -208,8 +216,52 @@ class FoodDetailActivity : AppCompatActivity() {
         findPendingBill()
 
         addToCart_button.setOnClickListener() {
-
+            if(sizeChosen != "none" && amount_text.text.isNotEmpty()) {
+                if(keyBill != "none") {
+                    pushItemToPendingBill(curDish!!)
+                }
+                else {
+                    createNewBill()
+                    pushItemToPendingBill(curDish!!)
+                }
+                showDialog()
+            }
+            else if(amount_text.text.isEmpty())
+                Toast.makeText(this, "Sold out!", Toast.LENGTH_LONG).show()
+            else
+                Toast.makeText(this, "Please choose a food size!", Toast.LENGTH_LONG).show()
         }
+
+        buyNow_button.setOnClickListener() {
+            if(amount_text.text.isNotEmpty() && sizeChosen != "none") {
+                createNewBillBuyNow(curDish!!)
+                val intent = Intent(this, CheckoutActivity::class.java)
+                val bundle = Bundle()
+                bundle.putString("key", keyBill)
+                bundle.putBoolean("isBuyNow", true)
+                intent.putExtras(bundle)
+                startActivity(intent)
+                finish()
+            }
+            else {
+                Toast.makeText(this, "Please choose size and amount", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        ic_heart.setOnClickListener() {
+            if(isFav){
+                deleteFav(curDish!!)
+                ic_heart.setImageResource(R.drawable.ic_heart)
+                isFav = false
+            }
+            else {
+                addFav(curDish!!)
+                ic_heart.setImageResource(R.drawable.ic_heart_fill)
+                isFav = true
+            }
+        }
+
+
     }
 
     private fun findPendingBill() {
@@ -232,7 +284,140 @@ class FoodDetailActivity : AppCompatActivity() {
         })
     }
 
+    private fun showDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_to_cart_success)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val backToHome_button = dialog.findViewById<Button>(R.id.backToHome_button)
+        backToHome_button.setOnClickListener() {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun convertToDoubleFormat(str: String): Double {
+        var strNum = str
+        return if(strNum.contains(",")) {
+            strNum = strNum.replace(",", ".")
+            strNum.toDouble()
+        } else
+            strNum.toDouble()
+    }
+
+    private fun addFav(curDish: Dish) {
+        if(keyFav == "none") {
+            val dbRef = FirebaseDatabase.getInstance().getReference("Favourite")
+            keyFav = dbRef.push().key.toString()
+            val hashMap = HashMap<String, String>()
+            hashMap["customerEmail"] = customerEmail
+            dbRef.child(keyFav).setValue(hashMap)
+        }
+        val dbRef2 = FirebaseDatabase.getInstance().getReference("Favourite/$keyFav/products")
+        val keyPush = dbRef2.push().key.toString()
+        dbRef2.child(keyPush).setValue(curDish.id)
+        Toast.makeText(this, "Add to Favourite successfully!", Toast.LENGTH_LONG).show()
+    }
+
+    private fun deleteFav(curDish: Dish) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Favourite/$keyFav/products")
+        dbRef.get().addOnSuccessListener {
+            for(data in it.children) {
+                if(data.value as String == curDish.id) {
+                    data.ref.removeValue()
+                    Toast.makeText(this, "Remove successfully!", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
+    private fun createNewBillBuyNow(curDish: Dish) {
+        val price = convertToDoubleFormat(price_value.text.toString())
+
+        val newBill = CreateBillItem(
+            customerEmail,
+            "pending",
+            price
+        )
+
+        //create new bill with pending status
+        val dbCreate = FirebaseDatabase.getInstance().getReference("Bill")
+        keyBill = dbCreate.push().key.toString()
+        dbCreate.child(keyBill).setValue(newBill)
+
+        //push current dish into new bill above
+        val dbPushProduct = FirebaseDatabase.getInstance().getReference("Bill/$keyBill/products")
+        val item = PushBillItem(
+            amount_text.text.toString().toLong(),
+            curDish.id,
+            curDish.name,
+            sizeChosen,
+            price
+        )
+        dbPushProduct.push().setValue(item)
+    }
+
+    private fun createNewBill() {
+        val newBill = CreateBillItem(
+            customerEmail,
+            "pending",
+            0.0
+        )
+        val dbCreate = FirebaseDatabase.getInstance().getReference("Bill")
+        keyBill = dbCreate.push().key.toString()
+        dbCreate.child(keyBill).setValue(newBill)
+    }
+
+    private fun pushItemToPendingBill(curDish: Dish) {
+        var isAdded = false
+        val curSize = sizeChosen
+        val unitPrice = convertToDoubleFormat(price_value.text.toString())
+
+        val dbPush = FirebaseDatabase.getInstance().getReference("Bill/$keyBill/products")
+        dbPush.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(data in snapshot.children) {
+                    if(data.child("id").value as String == curDish.id &&
+                        data.child("size").value as String == curSize) {
+                        isAdded = true
+
+                        val curAmount = data.child("amount").value as Long
+
+                        val a: Any = data.child("unitPrice").value as Any
+                        val type = a::class.simpleName
+                        var curPrice = 0.0
+                        if(type == "Long" || type == "Double")
+                            curPrice = a.toString().toDouble()
+
+                        val newAmount = curAmount + 1
+                        val newPrice = curPrice + unitPrice
+
+                        dbPush.child("${data.key}/amount").setValue(newAmount)
+                        dbPush.child("${data.key}/unitPrice").setValue(df.format(newPrice).toDouble())
+                    }
+                }
+
+                if(!isAdded) {
+                    val item = PushBillItem(
+                        amount_text.text.toString().toLong(),
+                        curDish.id,
+                        curDish.name,
+                        sizeChosen,
+                        unitPrice
+                    )
+                    dbPush.push().setValue(item)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //null
+            }
+        })
+
+        val dbUpdate = FirebaseDatabase.getInstance().getReference("Bill/$keyBill")
+        val newTotal = subTotal + unitPrice
+        dbUpdate.child("subTotal").setValue(convertToDoubleFormat(df.format(newTotal)))
+    }
 
     private fun resetButton() {
         image_s_size.setBackgroundResource(R.drawable.rounded_button)
