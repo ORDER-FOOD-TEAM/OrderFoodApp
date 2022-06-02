@@ -11,12 +11,18 @@ import android.os.Build
 import android.os.Bundle
 import android.transition.Fade
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.orderfoodapp.R
+import com.example.orderfoodapp.adapters.CommentAdapter
+import com.example.orderfoodapp.adapters.DishAdapter
 import com.example.orderfoodapp.fragments.MainMenuFragment
+import com.example.orderfoodapp.models.CommentItem
 import com.example.orderfoodapp.models.CreateBillItem
 import com.example.orderfoodapp.models.Dish
 import com.example.orderfoodapp.models.PushBillItem
@@ -51,7 +57,9 @@ class FoodDetailActivity : AppCompatActivity() {
     private var keyFav = "none"
     private var isFav = false
 
-
+    private lateinit var commentAdapter: CommentAdapter
+    private lateinit var sameProviderAdapter: DishAdapter
+    private lateinit var sameCategoryAdapter: DishAdapter
 
     @RequiresApi(Build.VERSION_CODES.KITKAT)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -261,7 +269,59 @@ class FoodDetailActivity : AppCompatActivity() {
             }
         }
 
+        commentAdapter = CommentAdapter(mutableListOf())
+        comment_recyclerView.adapter = commentAdapter
 
+        sameProviderAdapter = DishAdapter(mutableListOf())
+        sameProvider_recyclerView.adapter = sameProviderAdapter
+
+        sameCategoryAdapter = DishAdapter(mutableListOf())
+        sameCategory_recyclerView.adapter = sameCategoryAdapter
+
+        val layoutManager1 = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
+        comment_recyclerView.layoutManager = layoutManager1
+        val itemDecoration = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        comment_recyclerView.addItemDecoration(itemDecoration)
+
+        val layoutManager2 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        sameProvider_recyclerView.layoutManager = layoutManager2
+
+        val layoutManager3 = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
+        sameCategory_recyclerView.layoutManager = layoutManager3
+
+        hideComment()
+        loadComment(curDish!!)
+
+
+    }
+
+    private fun showDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_add_to_cart_success)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val backToHome_button = dialog.findViewById<Button>(R.id.backToHome_button)
+        backToHome_button.setOnClickListener() {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun convertToDoubleFormat(str: String): Double {
+        var strNum = str
+        return if(strNum.contains(",")) {
+            strNum = strNum.replace(",", ".")
+            strNum.toDouble()
+        } else
+            strNum.toDouble()
+    }
+
+    private fun setMargins(view: View, left: Int, top: Int, right: Int, bottom: Int) {
+        if (view.layoutParams is ViewGroup.MarginLayoutParams) {
+            val p = view.layoutParams as ViewGroup.MarginLayoutParams
+            p.setMargins(left, top, right, bottom)
+            view.requestLayout()
+        }
     }
 
     private fun findPendingBill() {
@@ -284,25 +344,57 @@ class FoodDetailActivity : AppCompatActivity() {
         })
     }
 
-    private fun showDialog() {
-        val dialog = Dialog(this)
-        dialog.setContentView(R.layout.dialog_add_to_cart_success)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    private fun loadComment(curDish: Dish) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Comment/${curDish.id}")
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                commentAdapter.deleteAll()
+                for(data in snapshot.children) {
+                    val comment = CommentItem (
+                        data.child("customerEmail").value as String,
+                        data.child("rating").value as Long,
+                        data.child("comment").value as String,
+                        data.child("time").value as String
+                    )
+                    commentAdapter.addComment(comment)
+                }
 
-        val backToHome_button = dialog.findViewById<Button>(R.id.backToHome_button)
-        backToHome_button.setOnClickListener() {
-            dialog.dismiss()
-        }
-        dialog.show()
+                if(commentAdapter.itemCount == 0)
+                    comment_textView.text = "No comments yet!"
+                else
+                    comment_textView.text = "Comments"
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@FoodDetailActivity, "Cannot load comments!", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    private fun convertToDoubleFormat(str: String): Double {
-        var strNum = str
-        return if(strNum.contains(",")) {
-            strNum = strNum.replace(",", ".")
-            strNum.toDouble()
-        } else
-            strNum.toDouble()
+    private fun showComment() {
+        leaveRating_textView.visibility = View.VISIBLE
+        star1_image.visibility = View.VISIBLE
+        star2_image.visibility = View.VISIBLE
+        star3_image.visibility = View.VISIBLE
+        star4_image.visibility = View.VISIBLE
+        star5_image.visibility = View.VISIBLE
+        circleImageView.visibility = View.VISIBLE
+        comment_editText.visibility = View.VISIBLE
+        send_button.visibility = View.VISIBLE
+        setMargins(comment_textView, 90, 450, 0, 0)
+    }
+
+    private fun hideComment() {
+        leaveRating_textView.visibility = View.GONE
+        star1_image.visibility = View.GONE
+        star2_image.visibility = View.GONE
+        star3_image.visibility = View.GONE
+        star4_image.visibility = View.GONE
+        star5_image.visibility = View.GONE
+        circleImageView.visibility = View.GONE
+        comment_editText.visibility = View.GONE
+        send_button.visibility = View.GONE
+        setMargins(comment_textView, 90, 0, 0, 0)
     }
 
     private fun addFav(curDish: Dish) {
