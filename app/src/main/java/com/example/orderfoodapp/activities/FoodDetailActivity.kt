@@ -7,8 +7,10 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.transition.Fade
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +39,8 @@ import com.r0adkll.slidr.Slidr
 import kotlinx.android.synthetic.main.activity_food_detail.*
 import java.io.File
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FoodDetailActivity : AppCompatActivity() {
 
@@ -56,6 +60,8 @@ class FoodDetailActivity : AppCompatActivity() {
 
     private var keyFav = "none"
     private var isFav = false
+
+    private var rating: Long = 5
 
     private lateinit var commentAdapter: CommentAdapter
     private lateinit var sameProviderAdapter: DishAdapter
@@ -291,8 +297,49 @@ class FoodDetailActivity : AppCompatActivity() {
 
         hideComment()
         loadComment(curDish!!)
+        checkBuyOrNot(curDish)
+        loadRecommended(curDish)
 
+        star1_image.setOnClickListener() {
+            onStarClick(it)
+        }
 
+        star2_image.setOnClickListener() {
+            onStarClick(it)
+        }
+
+        star3_image.setOnClickListener() {
+            onStarClick(it)
+        }
+
+        star4_image.setOnClickListener() {
+            onStarClick(it)
+        }
+
+        star5_image.setOnClickListener() {
+            onStarClick(it)
+        }
+
+        send_button.setOnClickListener() {
+            onCommentClick(curDish)
+        }
+
+        ic_share.setOnClickListener() {
+            val intent = Intent()
+            intent.action = Intent.ACTION_SEND
+
+            val path = MediaStore.Images.Media.insertImage(
+                contentResolver,
+                bitmap,
+                "Food",
+                "I want to share this amazing food to everyoneee"
+            )
+            val uri = Uri.parse(path)
+
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            intent.type = "image/*"
+            startActivity(Intent.createChooser(intent, "Share this food to: "))
+        }
     }
 
     private fun showDialog() {
@@ -342,6 +389,135 @@ class FoodDetailActivity : AppCompatActivity() {
                 //none
             }
         })
+    }
+
+    private fun pushComment(curDish: Dish) {
+        val content = comment_editText.text.toString()
+
+        val sdf = SimpleDateFormat("HH:mm dd/MM/yyyy")
+        val time = sdf.format(Calendar.getInstance().time)
+        val comment = CommentItem(
+            customerEmail,
+            rating,
+            content,
+            time)
+
+        val dishID = curDish.id
+        val dbRef = FirebaseDatabase.getInstance().getReference("Comment/$dishID")
+        dbRef.push().setValue(comment)
+        Toast.makeText(this@FoodDetailActivity, "Thanks for your feedback!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun onCommentClick(curDish: Dish) {
+        var isUploaded = false
+        val dbRef = FirebaseDatabase.getInstance().getReference("Comment/${curDish.id}")
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(data in snapshot.children) {
+                    if(data.child("customerEmail").value as String == customerEmail) {
+                        val dbRemove = FirebaseDatabase.getInstance().getReference("Comment/${curDish.id}/${data.key}")
+                        dbRemove.ref.removeValue()
+                        pushComment(curDish)
+                        isUploaded = true
+                    }
+                }
+                if(!isUploaded)
+                    pushComment(curDish)
+                hideComment()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@FoodDetailActivity, "Cannot upload comments!", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun onStarClick(view: View) {
+        when(view.id) {
+            R.id.star1_image -> {
+                rating = 1
+                star1_image.setImageResource(R.drawable.ic_big_star)
+                star2_image.setImageResource(R.drawable.ic_big_empty_star)
+                star3_image.setImageResource(R.drawable.ic_big_empty_star)
+                star4_image.setImageResource(R.drawable.ic_big_empty_star)
+                star5_image.setImageResource(R.drawable.ic_big_empty_star)
+            }
+
+            R.id.star2_image -> {
+                rating = 2
+                star1_image.setImageResource(R.drawable.ic_big_star)
+                star2_image.setImageResource(R.drawable.ic_big_star)
+                star3_image.setImageResource(R.drawable.ic_big_empty_star)
+                star4_image.setImageResource(R.drawable.ic_big_empty_star)
+                star5_image.setImageResource(R.drawable.ic_big_empty_star)
+            }
+
+            R.id.star3_image -> {
+                rating = 3
+                star1_image.setImageResource(R.drawable.ic_big_star)
+                star2_image.setImageResource(R.drawable.ic_big_star)
+                star3_image.setImageResource(R.drawable.ic_big_star)
+                star4_image.setImageResource(R.drawable.ic_big_empty_star)
+                star5_image.setImageResource(R.drawable.ic_big_empty_star)
+            }
+
+            R.id.star4_image -> {
+                rating = 4
+                star1_image.setImageResource(R.drawable.ic_big_star)
+                star2_image.setImageResource(R.drawable.ic_big_star)
+                star3_image.setImageResource(R.drawable.ic_big_star)
+                star4_image.setImageResource(R.drawable.ic_big_star)
+                star5_image.setImageResource(R.drawable.ic_big_empty_star)
+            }
+
+            R.id.star5_image -> {
+                rating = 5
+                star1_image.setImageResource(R.drawable.ic_big_star)
+                star2_image.setImageResource(R.drawable.ic_big_star)
+                star3_image.setImageResource(R.drawable.ic_big_star)
+                star4_image.setImageResource(R.drawable.ic_big_star)
+                star5_image.setImageResource(R.drawable.ic_big_star)
+            }
+        }
+    }
+
+    private fun checkBuyOrNot(curDish: Dish) {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Bill")
+        dbRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (data in snapshot.children) {
+                    if ((data.child("customerEmail").value)?.equals(customerEmail) == true
+                        && data.child("status").value?.equals("done") == true) {
+
+                        val dbRef2 = FirebaseDatabase.getInstance().getReference("Bill/${data.key}/products")
+                        dbRef2.get().addOnSuccessListener {
+                            for(data2 in it.children) {
+                                if(data2.child("id").value as String == curDish.id) {
+                                    showComment()
+                                    break
+                                }
+                            }
+                        }
+                    }
+                    else
+                        Toast.makeText(this@FoodDetailActivity, "Failed!", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //null
+            }
+        })
+    }
+
+    private fun loadRecommended(curDish: Dish) {
+        for(item in listDish) {
+            if(item.provider == curDish.provider && item.id != curDish.id)
+                sameProviderAdapter.addDish(item)
+
+            if(item.category == curDish.category && item.id != curDish.id)
+                sameCategoryAdapter.addDish(item)
+        }
     }
 
     private fun loadComment(curDish: Dish) {
