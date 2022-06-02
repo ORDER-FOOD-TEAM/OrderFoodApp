@@ -35,6 +35,8 @@ class FoodDetailActivity : AppCompatActivity() {
 
     private val df = DecimalFormat("##.00")
     private var sizeChosen = "none"
+    private var keyBill = "none"
+    private var subTotal = 0.0
 
     private var priceS: Double = 0.0
     private var priceM: Double = 0.0
@@ -137,13 +139,100 @@ class FoodDetailActivity : AppCompatActivity() {
             finish()
         }
 
+        //handle the
         image_s_size.setOnClickListener() {
             resetButton()
+            //sizeChosen = "S"
             showCurAmount(curDish!!, it)
 
+            image_s_size.setBackgroundResource(R.drawable.rounded_button_clicked)
+            s_size_text.setTextColor(Color.BLACK)
+            s_size_text.typeface = Typeface.DEFAULT_BOLD
+
+            sizeChosen = "S"
+        }
+
+        image_m_size.setOnClickListener() {
+            resetButton()
+            //sizeChosen = "M"
+            showCurAmount(curDish!!, it)
+
+            image_m_size.setBackgroundResource(R.drawable.rounded_button_clicked)
+            m_size_text.setTextColor(Color.BLACK)
+            m_size_text.typeface = Typeface.DEFAULT_BOLD
+
+            sizeChosen = "M"
+        }
+
+        image_l_size.setOnClickListener() {
+            resetButton()
+            //sizeChosen = "L"
+            showCurAmount(curDish!!, it)
+
+            image_l_size.setBackgroundResource(R.drawable.rounded_button_clicked)
+            l_size_text.setTextColor(Color.BLACK)
+            l_size_text.typeface = Typeface.DEFAULT_BOLD
+
+            sizeChosen = "L"
+        }
+
+        //handle the increase amount btn
+        image_increase_amount.setOnClickListener() {
+            var amount = amount_text.text.toString().toInt()
+            if(number_text.text.isNotEmpty()) {
+                if(amount < number_text.text.toString().toInt()) {
+                    amount++
+                    amount_text.text = amount.toString()
+                    displayPrice()
+                }
+                else {
+                    Toast.makeText(this@FoodDetailActivity, "Maximum", Toast.LENGTH_LONG).show()
+                }
+            }
+            else {
+                Toast.makeText(this@FoodDetailActivity, "Please choose a food size!", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        //handle the decrease amount btn
+        image_decrease_amount.setOnClickListener() {
+            var amount = amount_text.text.toString().toInt()
+            if(amount > 1) {
+                amount--
+                amount_text.text = amount.toString()
+            }
+            displayPrice()
+        }
+
+        //find the pending bill of this customer
+        findPendingBill()
+
+        addToCart_button.setOnClickListener() {
 
         }
     }
+
+    private fun findPendingBill() {
+        val dbRef = FirebaseDatabase.getInstance().getReference("Bill")
+        dbRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(data in snapshot.children) {
+                    if((data.child("customerEmail").value)?.equals(customerEmail) == true &&
+                        data.child("status").value?.equals("pending") == true) {
+                        keyBill = data.key.toString()
+                        subTotal = data.child("subTotal").value.toString().toDouble()
+                        break
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //none
+            }
+        })
+    }
+
+
 
     private fun resetButton() {
         image_s_size.setBackgroundResource(R.drawable.rounded_button)
