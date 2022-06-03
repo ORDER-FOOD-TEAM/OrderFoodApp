@@ -4,18 +4,21 @@
 
     <item
         android:id="@+id/navbottombar_home"
+        android:icon="@drawable/ic_home"
         android:title="Home"
         android:enabled="true"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/navbottombar_favourite"
+        android:icon="@drawable/ic_heart"
         android:title="Favourite"
         android:enabled="true"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/navbottombar_profile"
+        android:icon="@drawable/ic_circle_user"
         android:title="Profile"
         android:enabled="true"
         app:showAsAction="ifRoom" />
