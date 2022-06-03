@@ -13,18 +13,18 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_filter_asian_food.*
+import kotlinx.android.synthetic.main.fragment_filter_pizza.*
 
-class FilterAsianFoodFragment : Fragment() {
+class FilterPizzaFragment : Fragment() {
 
-    private lateinit var dishAdapterAsianFood: DishAdapter
+    private lateinit var dishAdapterWestern: DishAdapter
 
     private lateinit var map: HashMap<String, String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        map = java.util.HashMap()
+        map = HashMap()
         val bundle = this.arguments
         if (bundle != null) {
             map = bundle.getSerializable("map") as HashMap<String, String>
@@ -36,24 +36,24 @@ class FilterAsianFoodFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter_asian_food, container, false)
+        return inflater.inflate(R.layout.fragment_filter_pizza, container, false)
     }
 
     override fun onResume() {
         super.onResume()
 
-        dishAdapterAsianFood = DishAdapter(mutableListOf())
-        asianFood_recyclerView.adapter = dishAdapterAsianFood
+        dishAdapterWestern = DishAdapter(mutableListOf())
+        pizza_recyclerView.adapter = dishAdapterWestern
 
         val layoutManager = GridLayoutManager(context,2)
-        asianFood_recyclerView.layoutManager = layoutManager
+        pizza_recyclerView.layoutManager = layoutManager
 
         val dbRef = FirebaseDatabase.getInstance().getReference("Product")
         dbRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                dishAdapterAsianFood.deleteAll()
+                dishAdapterWestern.deleteAll()
                 for(data in snapshot.children) {
-                    if((data.child("category").value as String) == "Asian") {
+                    if((data.child("category").value as String) == "Western") {
                         val prName = data.child("provider").value as String
                         if(map.containsKey(prName)) {
                             val deliveryTime = map[prName]
@@ -95,7 +95,7 @@ class FilterAsianFoodFragment : Fragment() {
                                 data.child("amountL").value as Long,
                                 data.child("amountLsold").value as Long,
                             )
-                            dishAdapterAsianFood.addDish(dish)
+                            dishAdapterWestern.addDish(dish)
                         }
                     }
                 }
@@ -107,4 +107,5 @@ class FilterAsianFoodFragment : Fragment() {
 
         })
     }
+
 }
