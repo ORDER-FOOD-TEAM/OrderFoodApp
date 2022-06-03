@@ -44,6 +44,7 @@ class MainMenuFragment : Fragment() {
     private lateinit var newsAdapter: NewsAdapter
 
     private val filterAllFoodFragment = FilterAllFoodFragment()
+    private val filterWesternFoodFragment = FilterPizzaFragment()
     private val filterAsianFoodFragment = FilterAsianFoodFragment()
     private val filterDrinkFragment = FilterDrinkFragment()
     private var searchFragment = SearchFragment()
@@ -140,6 +141,13 @@ class MainMenuFragment : Fragment() {
             filter_container_inside.visibility = View.GONE
         }
 
+        western_button.setOnClickListener {
+            curFragment = filterWesternFoodFragment
+            categoriesColorOnClick(it)
+            replaceFragment(filterWesternFoodFragment)
+            filter_container_inside.visibility = View.GONE
+        }
+
         beverages_button.setOnClickListener {
             curFragment = filterDrinkFragment
             categoriesColorOnClick(it)
@@ -218,6 +226,7 @@ class MainMenuFragment : Fragment() {
     private fun filterOnClick() {
         if(filter_layout.visibility == View.VISIBLE) {
             if( curFragment == filterAllFoodFragment ||
+                curFragment == filterWesternFoodFragment ||
                 curFragment == filterDrinkFragment ||
                 curFragment == filterAsianFoodFragment ||
                 curFragment == searchFragment) {
@@ -260,6 +269,12 @@ class MainMenuFragment : Fragment() {
                 allFood_textView.setTextColor(Color.parseColor("#FF8526"))
             }
 
+            R.id.western_button -> {
+                western_button.setBackgroundResource(R.drawable.bg_borderless_orange)
+                pizza_icon.setColorFilter(Color.WHITE)
+                pizza_textView.setTextColor(Color.parseColor("#FF8526"))
+            }
+
             R.id.beverages_button -> {
                 beverages_button.setBackgroundResource(R.drawable.bg_borderless_orange)
                 beverages_icon.setColorFilter(Color.WHITE)
@@ -279,9 +294,9 @@ class MainMenuFragment : Fragment() {
         allFood_icon.setColorFilter(Color.parseColor("#838383"))
         allFood_textView.setTextColor(Color.parseColor("#838383"))
 
-//        western_button.setBackgroundResource(R.drawable.bg_borderless_edit_text)
-//        pizza_icon.setColorFilter(Color.parseColor("#838383"))
-//        pizza_textView.setTextColor(Color.parseColor("#838383"))
+        western_button.setBackgroundResource(R.drawable.bg_borderless_edit_text)
+        pizza_icon.setColorFilter(Color.parseColor("#838383"))
+        pizza_textView.setTextColor(Color.parseColor("#838383"))
 
         beverages_button.setBackgroundResource(R.drawable.bg_borderless_edit_text)
         beverages_icon.setColorFilter(Color.parseColor("#838383"))
