@@ -52,7 +52,7 @@
             android:name=".activities.EditProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.PaymentMethod"
+            android:name=".activities.PaymentMethodActivity"
             android:exported="false" />
         <activity
             android:name=".activities.OrderHistory"
