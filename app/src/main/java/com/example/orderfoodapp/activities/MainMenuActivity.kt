@@ -6,7 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
-import com.example.orderfoodapp.fragments.FavouriteFagment
+import com.example.orderfoodapp.fragments.FavouriteFragment
 import com.example.orderfoodapp.fragments.MainMenuFragment
 import com.example.orderfoodapp.fragments.ProfileFragment
 import com.google.firebase.auth.ktx.auth
@@ -23,7 +23,7 @@ class MainMenuActivity : AppCompatActivity() {
 
     private val mainMenuFragment = MainMenuFragment()
     private val profileFragment = ProfileFragment()
-    private val favouriteFragment = FavouriteFagment()
+    private val favouriteFragment = FavouriteFragment()
 
     //private val bottom_app_bar = findViewById<BottomNavigationView>(R.id.bottom_app_bar)
     //private val shoppingCart_button = findViewById<FloatingActionButton>(R.id.shoppingCart_button)

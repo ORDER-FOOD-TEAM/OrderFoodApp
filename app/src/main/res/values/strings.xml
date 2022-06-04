@@ -17,7 +17,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="checkout"><b>Checkout</b></string>
     <string name="edit_profile"><b>Profile</b></string>
-    <string name="order_history"><b>Order History</b></string>
+    <string name="order_history"><b>Order history</b></string>
     <string name="my_order"><b>My order</b></string>
     <string name="deliver_to"><b>Deliver to</b></string>
     <string name="coupon"><b>Coupon</b></string>
@@ -53,4 +53,9 @@
     <string name="fb_login_protocol_scheme">fb336674361732048</string>
     <string name="facebook_client_token">053f2192e5a7989e6d799ba7b59c6a11</string>
     <string name="new_s_title">New\'s title</string>
+    <string name="about_us">About us</string>
+    <string name="profile">Profile</string>
+    <string name="profile_name">George William</string>
+    <string name="profile_email">geogrewilliam@gmail.com</string>
+    <string name="log_out">Log out</string>
 </resources>

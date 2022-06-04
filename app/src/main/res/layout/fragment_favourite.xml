@@ -31,37 +31,37 @@
             app:layout_constraintVertical_bias="0.45" />
 
 
-        <ImageView
-            android:id="@+id/img_hamburger"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="140dp"
-            android:layout_marginTop="72dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_hamburger"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <ImageView-->
+<!--            android:id="@+id/img_hamburger"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_marginStart="140dp"-->
+<!--            android:layout_marginTop="72dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/ic_hamburger"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <ImageView
-            android:id="@+id/img_drink"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/img_hamburger"
-            android:layout_marginTop="65dp"
-            android:src="@drawable/img_drink"
-            android:scaleType="centerCrop"/>
+<!--        <ImageView-->
+<!--            android:id="@+id/img_drink"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@id/img_hamburger"-->
+<!--            android:layout_marginTop="65dp"-->
+<!--            android:src="@drawable/img_drink"-->
+<!--            android:scaleType="centerCrop"/>-->
 
-        <ImageView
-            android:id="@+id/img_pizza"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginTop="67dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_pizza_2"
-            app:layout_constraintStart_toEndOf="@id/img_hamburger"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <ImageView-->
+<!--            android:id="@+id/img_pizza"-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_marginStart="35dp"-->
+<!--            android:layout_marginTop="67dp"-->
+<!--            android:scaleType="centerCrop"-->
+<!--            android:src="@drawable/ic_pizza_2"-->
+<!--            app:layout_constraintStart_toEndOf="@id/img_hamburger"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
