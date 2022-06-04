@@ -46,10 +46,16 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        val cvEditProfile=view.findViewById<CardView>(R.id.cvEditProfile)
+        val cvPaymentMethod=view.findViewById<CardView>(R.id.cvPaymentMethod)
+        val cvOrderHistory=view.findViewById<CardView>(R.id.cvOrderHistory)
+        val cvAboutUs=view.findViewById<CardView>(R.id.cvAboutUs)
+        val cvLogout=view.findViewById<CardView>(R.id.cvLogout)
+
         cvEditProfile.setOnClickListener {
-            val intent = Intent(context, EditProfileActivity::class.java);
-            intent.putExtra("key",key);
-            startActivity(intent);
+            val intent = Intent(context, EditProfileActivity::class.java)
+            intent.putExtra("key",key)
+            startActivity(intent)
         }
         cvPaymentMethod.setOnClickListener {
             startActivity(Intent(context, PaymentMethodActivity::class.java))
@@ -73,11 +79,11 @@ class ProfileFragment : Fragment() {
         try {
             val customerEmail = Firebase.auth.currentUser!!.email.toString()
             profile_mail.text = customerEmail
-            val ref = FirebaseDatabase.getInstance().reference.child("Customer");
+            val ref = FirebaseDatabase.getInstance().reference.child("Customer")
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (data in snapshot.children) {
-                        key = data.key.toString();
+                        key = data.key.toString()
                         profile_name.text = data.child("fullName").value.toString()
                         break
                     }

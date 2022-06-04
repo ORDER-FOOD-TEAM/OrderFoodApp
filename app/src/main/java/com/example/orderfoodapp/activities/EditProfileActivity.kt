@@ -45,11 +45,11 @@ class EditProfileActivity : AppCompatActivity() {
 
         val dbRef = FirebaseDatabase.getInstance().getReference("Customer/$key")
         dbRef.get().addOnSuccessListener {
-            edtName.setText(it.child("fullName").value as String)
-            edtEmail.setText(it.child("email").value as String)
-            edtPhoneNumber.setText(it.child("phoneNumber").value as String)
-            edtGender.setText(it.child("gender").value as String)
-            edtDateOfBirth.setText(it.child("dateOfBirth").value as String)
+            edtName.setText(it.child("fullName").value.toString())
+            edtEmail.setText(it.child("email").value.toString())
+            edtPhoneNumber.setText(it.child("phoneNumber").value.toString())
+            edtGender.setText(it.child("gender").value.toString())
+            edtDateOfBirth.setText(it.child("dateOfBirth").value.toString())
         }
 
         back_layout.setOnClickListener() {
