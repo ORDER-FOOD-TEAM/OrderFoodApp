@@ -37,17 +37,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class ProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var key: String? = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,10 +47,12 @@ class ProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
         cvEditProfile.setOnClickListener {
-            startActivity(Intent(context, EditProfileActivity::class.java))
+            val intent = Intent(context, EditProfileActivity::class.java);
+            intent.putExtra("key",key);
+            startActivity(intent);
         }
         cvPaymentMethod.setOnClickListener {
-            startActivity(Intent(context, PaymentMethod::class.java))
+            startActivity(Intent(context, PaymentMethodActivity::class.java))
         }
         cvOrderHistory.setOnClickListener {
             startActivity(Intent(context, OrderHistory::class.java))
@@ -81,11 +73,11 @@ class ProfileFragment : Fragment() {
         try {
             val customerEmail = Firebase.auth.currentUser!!.email.toString()
             profile_mail.text = customerEmail
-            val ref = FirebaseDatabase.getInstance().reference.child("Customer")
-                .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            val ref = FirebaseDatabase.getInstance().reference.child("Customer");
             ref.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (data in snapshot.children) {
+                        key = data.key.toString();
                         profile_name.text = data.child("fullName").value.toString()
                         break
                     }
