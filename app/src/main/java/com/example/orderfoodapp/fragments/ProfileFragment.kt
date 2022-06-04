@@ -1,11 +1,30 @@
 package com.example.orderfoodapp.fragments
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.annotation.NonNull
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
+import com.example.orderfoodapp.activities.*
+import com.facebook.login.LoginManager
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_profile.*
+import java.io.File
+import java.lang.Exception
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +54,82 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        cvEditProfile.setOnClickListener {
+            startActivity(Intent(context, EditProfileActivity::class.java))
+        }
+        cvPaymentMethod.setOnClickListener {
+            startActivity(Intent(context, PaymentMethod::class.java))
+        }
+        cvOrderHistory.setOnClickListener {
+            startActivity(Intent(context, OrderHistory::class.java))
+        }
+        cvAboutUs.setOnClickListener {
+            startActivity(Intent(context, AboutUsActivity::class.java))
+        }
+        cvLogout.setOnClickListener {
+            Logout()
+        }
+
+        displayCustomer()
+
+        return view
+    }
+
+    private fun displayCustomer() {
+        try {
+            val customerEmail = Firebase.auth.currentUser!!.email.toString()
+            profile_mail.text = customerEmail
+            val ref = FirebaseDatabase.getInstance().reference.child("Customer")
+                .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            ref.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (data in snapshot.children) {
+                        profile_name.text = data.child("fullName").value.toString()
+                        break
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        context,
+                        "Cannot load customer's data, please try again later!",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            })
+
+            val imgName = customerEmail.replace(".", "_")
+            val storageRef = FirebaseStorage.getInstance().getReference("avatar_image/$imgName.jpg")
+            val localFile = File.createTempFile("tempfile", ".jpg")
+            storageRef.getFile(localFile).addOnSuccessListener {
+                val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
+                profile_picture.setImageBitmap(bitmap)
+            }
+        }
+        //Check if user is not login -> go to login screen
+        catch (ex: KotlinNullPointerException) {
+            startActivity(Intent(context, MainActivity::class.java))
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+        }
+    }
+
+    private fun Logout() {
+        //Logout facebook
+        LoginManager.getInstance().logOut()
+
+        //Logout google
+        val oneTapClient = Identity.getSignInClient(requireActivity())
+        oneTapClient.signOut()
+
+        //Logout firebase
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
     }
 
     companion object {
