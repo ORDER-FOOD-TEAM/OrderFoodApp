@@ -7,9 +7,11 @@
         <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable-v24/bg_note_cart_item.xml" value="0.1" />
         <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable-v24/ic_delete.xml" value="0.1" />
         <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/drawable-v24/ic_edit.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/activity_order_history.xml" value="0.25" />
         <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/activity_payment_method.xml" value="0.1" />
         <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/dialog_order_success.xml" value="0.1" />
         <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/item_bill.xml" value="0.1" />
+        <entry key="..\:/GitHubServer/NMDD/OrderFoodApp/app/src/main/res/layout/item_order_history.xml" value="0.24895833333333334" />
       </map>
     </option>
   </component>
