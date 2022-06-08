@@ -15,12 +15,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
+import com.example.orderfoodapp.activities.ForgotPasswordActivity
 import com.example.orderfoodapp.activities.MainMenuActivity
 import com.facebook.*
 import com.facebook.login.LoginManager
@@ -43,43 +45,45 @@ import java.util.*
 
 /**
  * A simple [Fragment] subclass.
- * Use the [LoginFragment.newInstance] factory method to
+ * Use the [LoginFragment] factory method to
  * create an instance of this fragment.
  */
 class LoginFragment : Fragment() {
-    private lateinit var mAuth: FirebaseAuth;
-    private lateinit var oneTapClient: SignInClient;
-    private lateinit var signInRequest: BeginSignInRequest;
-    private lateinit var callbackManager: CallbackManager;
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var oneTapClient: SignInClient
+    private lateinit var signInRequest: BeginSignInRequest
+    private lateinit var callbackManager: CallbackManager
 
-    private lateinit var dialog: Dialog;
+    private lateinit var dialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_login, container, false);
+        val view = inflater.inflate(R.layout.fragment_login, container, false)
 
-        val btnLogin = view.findViewById<Button>(R.id.login_button);
-        val btnGoogleLogin = view.findViewById<FloatingActionButton>(R.id.google_login_button);
-        val btnFacebookLogin = view.findViewById<FloatingActionButton>(R.id.facebook_login_button);
+        val btnLogin = view.findViewById<Button>(R.id.login_button)
+        val btnGoogleLogin = view.findViewById<FloatingActionButton>(R.id.google_login_button)
+        val btnFacebookLogin = view.findViewById<FloatingActionButton>(R.id.facebook_login_button)
+        val txtForgetPassword = view.findViewById<TextView>(R.id.forgotpassword_textView)
+
 
         //init loading dialog
-        dialog = Dialog(requireContext());
-        dialog.setContentView(R.layout.dialog_loading_login);
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
+        dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_loading_login)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        configLoginFacebookManager();
+        configLoginFacebookManager()
 
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance()
 
         btnLogin.setOnClickListener {
-            loginUser();
+            loginUser()
         }
 
         btnGoogleLogin.setOnClickListener {
-            signInGoogle();
+            signInGoogle()
         }
 
         btnFacebookLogin.setOnClickListener {
@@ -87,59 +91,65 @@ class LoginFragment : Fragment() {
                 .logInWithReadPermissions(
                     this,
                     callbackManager,
-                    Arrays.asList("email", "public_profile")
+                    listOf<String>("email")
                 )
         }
 
-        return view;
+        txtForgetPassword.setOnClickListener {
+            startActivity(Intent(context,ForgotPasswordActivity::class.java))
+        }
+
+        return view
     }
 
     override fun onResume() {
         super.onResume()
 
-        val edtEmail = requireView().findViewById<EditText>(R.id.email_editText);
-        val edtPassword = requireView().findViewById<EditText>(R.id.password_editText);
+        val edtEmail = requireView().findViewById<EditText>(R.id.email_editText)
+        val edtPassword = requireView().findViewById<EditText>(R.id.password_editText)
 
         //After sign up will return to fragment login -> auto fill field text
-        val emailPassed = SignupFragment.SIGNUP_EMAIL;
-        val passwordPassed = SignupFragment.SIGNUP_PASSWORD;
+        val emailPassed = SignupFragment.SIGNUP_EMAIL
+        val passwordPassed = SignupFragment.SIGNUP_PASSWORD
 
         if (emailPassed.isNotEmpty() && passwordPassed.isNotEmpty()) {
-            edtEmail.setText(emailPassed);
-            edtPassword.setText(passwordPassed);
+            edtEmail.setText(emailPassed)
+            edtPassword.setText(passwordPassed)
         }
+
+
     }
 
     //Login with email and password
     private fun loginUser() {
-        dialog.show();
+        dialog.show()
 
-        val edtEmail = requireView().findViewById<EditText>(R.id.email_editText);
-        val edtPassword = requireView().findViewById<EditText>(R.id.password_editText);
+        val edtEmail = requireView().findViewById<EditText>(R.id.email_editText)
+        val edtPassword = requireView().findViewById<EditText>(R.id.password_editText)
 
-        val email = edtEmail.text.toString();
-        val password = edtPassword.text.toString();
+        val email = edtEmail.text.toString()
+        val password = edtPassword.text.toString()
 
         when {
             email.isEmpty() -> {
-                edtEmail.error = "Email can't be empty";
-                edtEmail.requestFocus();
+                edtEmail.error = "Email can't be empty"
+                edtEmail.requestFocus()
             }
 
             password.isEmpty() -> {
-                edtPassword.error = "Password can't be empty";
-                edtPassword.requestFocus();
+                edtPassword.error = "Password can't be empty"
+                edtPassword.requestFocus()
             }
 
             else -> {
-                signInWithEmailAndPasswordFirebase(email, password);
+                signInWithEmailAndPasswordFirebase(email, password)
             }
         }
     }
 
     //Login google
     private fun signInGoogle() {
-        oneTapClient = Identity.getSignInClient(requireActivity());
+        oneTapClient = Identity.getSignInClient(requireActivity())
         signInRequest = BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
                 BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
@@ -172,14 +182,14 @@ class LoginFragment : Fragment() {
                 try {
                     val credential =
                         oneTapClient.getSignInCredentialFromIntent(result.data)
-                    val idToken = credential.googleIdToken;
-                    val email = credential.id;
+                    val idToken = credential.googleIdToken
+                    val email = credential.id
                     when {
                         idToken != null -> {
                             // Got an ID token from Google. Use it to authenticate
                             // with your backend.
                             val firebaseCredential =
-                                GoogleAuthProvider.getCredential(idToken, null);
+                                GoogleAuthProvider.getCredential(idToken, null)
                             signInWithCredentialFirebase(firebaseCredential, email)
                         }
                         else -> {
@@ -208,17 +218,34 @@ class LoginFragment : Fragment() {
                     }
                 }
             }
-        };
+        }
 
     //Login facebook
     private fun configLoginFacebookManager() {
-        callbackManager = CallbackManager.Factory.create();
+        callbackManager = CallbackManager.Factory.create()
 
         LoginManager.getInstance().registerCallback(callbackManager,
             object : FacebookCallback<LoginResult> {
                 override fun onSuccess(result: LoginResult) {
-                    val email = getDataFacebookLogin(result.accessToken);
-                    handleFacebookAccessToken(result.accessToken, email);
+                    lateinit var email: String;
+
+                    val request = GraphRequest.newMeRequest(
+                        result.accessToken
+                    ) { `object`, response ->
+                        try {
+                            if (`object` != null) {
+                                email = `object`.getString("email")
+                                handleFacebookAccessToken(result.accessToken, email)
+                            }
+                        } catch (e: JSONException) {
+                        }
+                    }
+
+                    val parameters = Bundle()
+                    parameters.putString("fields", "id,name,email")
+                    request.parameters = parameters
+                    request.executeAsync()
+
                     Log.d("Success", "Login")
                 }
 
@@ -235,29 +262,19 @@ class LoginFragment : Fragment() {
     private fun handleFacebookAccessToken(token: AccessToken, email: String) {
         Log.d("FB Token", "handleFacebookAccessToken:$token")
 
-        val credential = FacebookAuthProvider.getCredential(token.token);
-        signInWithCredentialFirebase(credential, email);
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        signInWithCredentialFirebase(credential, email)
     }
 
     private fun getDataFacebookLogin(token: AccessToken): String {
-        lateinit var email: String;
-        val request = GraphRequest.newMeRequest(
-            token
-        ) { obj, response ->
-            val json = response?.jsonObject;
-            try {
-                if (json != null) {
-                    email = json.getString("email")
-                }
-            } catch (e: JSONException) {
-            }
-        }
-        return email;
+        lateinit var email: String
+
+        return email
     }
 
     //Sign in to firebase
     private fun signInWithCredentialFirebase(credential: AuthCredential, email: String) {
-        dialog.show();
+        dialog.show()
 
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
@@ -266,7 +283,7 @@ class LoginFragment : Fragment() {
                         "Sign in",
                         "signInWithCredential:success"
                     )
-                    createUserIfNotExists(email);
+                    createUserIfNotExists(email)
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(
@@ -274,7 +291,7 @@ class LoginFragment : Fragment() {
                         "signInWithCredential:failure",
                         task.exception
                     )
-                    Toast.makeText(context, task.exception?.message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, task.exception?.message, Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -298,16 +315,16 @@ class LoginFragment : Fragment() {
                         ).show()
 
                     } else {
-                        notifyLoginSuccessAndStartActivity();
+                        notifyLoginSuccessAndStartActivity()
                     }
                 } else {
                     if (dialog.isShowing) {
                         dialog.dismiss()
                     }
-                    android.widget.Toast.makeText(
+                    Toast.makeText(
                         requireActivity(),
-                        "Login Error: " + task.exception,
-                        android.widget.Toast.LENGTH_SHORT
+                        "Login Error: " + task.exception?.message,
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -317,9 +334,9 @@ class LoginFragment : Fragment() {
     private fun notifyLoginSuccessAndStartActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (dialog.isShowing) {
-                dialog.dismiss();
+                dialog.dismiss()
             }
-        }, 1500);
+        }, 1500)
 
         // Sign in success, update UI with the signed-in user's information
         Toast.makeText(
@@ -333,16 +350,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun createUserIfNotExists(email: String) {
-        val dbRef = FirebaseDatabase.getInstance().getReference("Customer");
-        val query = dbRef.orderByChild("email").equalTo(email);
+        val dbRef = FirebaseDatabase.getInstance().getReference("Customer")
+        val query = dbRef.orderByChild("email").equalTo(email)
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists())
-                    notifyLoginSuccessAndStartActivity();
+                    notifyLoginSuccessAndStartActivity()
                 else {
-                    SignupFragment.createCustomerData(email);
-                    notifyLoginSuccessAndStartActivity();
+                    SignupFragment.createCustomerData(email)
+                    notifyLoginSuccessAndStartActivity()
                 }
             }
 
