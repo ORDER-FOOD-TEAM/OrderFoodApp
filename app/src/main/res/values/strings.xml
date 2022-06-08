@@ -27,8 +27,8 @@
     <string name="on_sale"><i>ON SALE NOW, HURRY UP!</i></string>
     <string name="comment_something"><i>Comment something...</i></string>
     <string name="about_us_text">
-        Yummy Food is our food delivery platform that makes getting great food from your favorite local restaurants as easy as requesting a ride.<br />
-        Yummy Food app connects you with a broad range of local restaurants and food, so you can order from the full menus of your local favorites whenever you want.<br />
+        Pizza University is our food delivery platform that makes getting great food from your favorite local restaurants as easy as requesting a ride.<br />
+        Pizza University app connects you with a broad range of local restaurants and food, so you can order from the full menus of your local favorites whenever you want.<br />
     </string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="type_something"><i>Type something…</i></string>
@@ -59,4 +59,5 @@
     <string name="profile_email">geogrewilliam@gmail.com</string>
     <string name="log_out">Log out</string>
     <string name="reset_password">Reset password</string>
+    <string name="name_app">Pizza University</string>
 </resources>

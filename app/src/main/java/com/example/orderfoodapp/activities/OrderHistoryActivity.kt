@@ -76,7 +76,7 @@ class OrderHistoryActivity : AppCompatActivity() {
 
         })
 
-        back_layout.setOnClickListener() {
+        btnBack.setOnClickListener() {
             finish()
         }
     }

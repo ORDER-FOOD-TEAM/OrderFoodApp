@@ -53,7 +53,7 @@ class FilterPizzaFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 dishAdapterWestern.deleteAll()
                 for(data in snapshot.children) {
-                    if((data.child("category").value as String) == "Western") {
+                    if((data.child("category").value as String) == "Pizza") {
                         val prName = data.child("provider").value as String
                         if(map.containsKey(prName)) {
                             val deliveryTime = map[prName]

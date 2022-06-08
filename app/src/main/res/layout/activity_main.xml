@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
-            android:text="Yummyyyy"
+            android:text="@string/name_app"
             android:textColor="@color/black"
             android:textSize="33sp" />
 

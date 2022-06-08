@@ -32,7 +32,7 @@
 
         <activity
             android:name=".activities.CheckoutActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".activities.CartActivity"
             android:exported="false" />

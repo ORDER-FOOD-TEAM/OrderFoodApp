@@ -68,7 +68,7 @@ class ProfileFragment : Fragment() {
             startActivity(Intent(context, PaymentMethodActivity::class.java))
         }
         cvOrderHistory.setOnClickListener {
-            startActivity(Intent(context, OrderHistory::class.java))
+            startActivity(Intent(context, OrderHistoryActivity::class.java))
         }
         cvAboutUs.setOnClickListener {
             startActivity(Intent(context, AboutUsActivity::class.java))
