@@ -49,13 +49,14 @@
     <string name="confirm_action">Confirm</string>
     <string name="email_address">Email Address</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="facebook_app_id">336674361732048</string>
-    <string name="fb_login_protocol_scheme">fb336674361732048</string>
-    <string name="facebook_client_token">053f2192e5a7989e6d799ba7b59c6a11</string>
+    <string name="facebook_app_id">498967178650384</string>
+    <string name="fb_login_protocol_scheme">fb498967178650384</string>
+    <string name="facebook_client_token">d410a8bc5bd93a030a5eb49631ade6b3</string>
     <string name="new_s_title">New\'s title</string>
     <string name="about_us">About us</string>
     <string name="profile">Profile</string>
     <string name="profile_name">George William</string>
     <string name="profile_email">geogrewilliam@gmail.com</string>
     <string name="log_out">Log out</string>
+    <string name="reset_password">Reset password</string>
 </resources>

@@ -2,6 +2,9 @@ package com.example.orderfoodapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.orderfoodapp.R
 import com.google.firebase.auth.FirebaseAuth
@@ -12,11 +15,14 @@ class ForgotPasswordActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_forgot_password)
 
-        back_button.setOnClickListener() {
+        val backButton = findViewById<ImageView>(R.id.btnBack)
+        val forgotPasswordButton = findViewById<Button>(R.id.forgotPassword_button)
+
+        backButton.setOnClickListener() {
             finish()
         }
 
-        forgotPassword_button.setOnClickListener() {
+        forgotPasswordButton.setOnClickListener() {
             resetPassword()
         }
     }
