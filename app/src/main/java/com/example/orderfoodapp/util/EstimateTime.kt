@@ -26,7 +26,7 @@ class EstimateTime {
         val time = (meters / speedPerMin).roundToInt()
 
         return if (time <= 5)
-            "Closely"
+            "Nearby"
         else
             "$time min"
     }
