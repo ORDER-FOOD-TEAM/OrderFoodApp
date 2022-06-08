@@ -55,7 +55,7 @@
             android:name=".activities.PaymentMethodActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.OrderHistory"
+            android:name=".activities.OrderHistoryActivity"
             android:exported="false" />
         <activity
             android:name=".activities.MainMenuActivity"

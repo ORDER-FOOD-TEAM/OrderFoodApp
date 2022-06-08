@@ -32,15 +32,18 @@ class ForgotPasswordActivity : AppCompatActivity() {
         if (email.isEmpty()) {
             email_editText.error = "Email can't be empty"
             email_editText.requestFocus()
-        }
-        else {
+        } else {
             val auth = FirebaseAuth.getInstance()
             auth.sendPasswordResetEmail(email).addOnCompleteListener() { task ->
-                if(task.isSuccessful) {
-                    Toast.makeText(this, "Please check your mail to reset password", Toast.LENGTH_LONG).show()
-                }
-                else {
-                    Toast.makeText(this, "Something went wrong! Try again!", Toast.LENGTH_LONG).show()
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        this,
+                        "Please check your mail to reset password",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    Toast.makeText(this, "Something went wrong! Try again!", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
         }
