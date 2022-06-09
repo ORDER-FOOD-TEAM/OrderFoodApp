@@ -3,9 +3,11 @@ package com.example.orderfoodapp.fragments
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
@@ -38,6 +40,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class ProfileFragment : Fragment() {
     private var key: String? = ""
+    private lateinit var profile_mail : TextView;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,16 +49,26 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        val cvEditProfile=view.findViewById<CardView>(R.id.cvEditProfile)
+        val cvPaymentMethod=view.findViewById<CardView>(R.id.cvPaymentMethod)
+        val cvOrderHistory=view.findViewById<CardView>(R.id.cvOrderHistory)
+        val cvAboutUs=view.findViewById<CardView>(R.id.cvAboutUs)
+        val cvLogout=view.findViewById<CardView>(R.id.cvLogout)
+
+        profile_mail = view.findViewById(R.id.profile_mail)
+
+        displayCustomer()
+
         cvEditProfile.setOnClickListener {
-            val intent = Intent(context, EditProfileActivity::class.java);
-            intent.putExtra("key",key);
-            startActivity(intent);
+            val intent = Intent(context, EditProfileActivity::class.java)
+            intent.putExtra("key",key)
+            startActivity(intent)
         }
         cvPaymentMethod.setOnClickListener {
             startActivity(Intent(context, PaymentMethodActivity::class.java))
         }
         cvOrderHistory.setOnClickListener {
-            startActivity(Intent(context, OrderHistory::class.java))
+            startActivity(Intent(context, OrderHistoryActivity::class.java))
         }
         cvAboutUs.setOnClickListener {
             startActivity(Intent(context, AboutUsActivity::class.java))
@@ -64,25 +77,45 @@ class ProfileFragment : Fragment() {
             Logout()
         }
 
-        displayCustomer()
-
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        displayCustomer()
     }
 
     private fun displayCustomer() {
         try {
             val customerEmail = Firebase.auth.currentUser!!.email.toString()
             profile_mail.text = customerEmail
-            val ref = FirebaseDatabase.getInstance().reference.child("Customer");
-            ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (data in snapshot.children) {
-                        key = data.key.toString();
+            val ref = FirebaseDatabase.getInstance().getReference("Customer")
+
+            //Get data first time
+            ref.get().addOnSuccessListener {
+                for (data in it.children) {
+                    if(data.child("email").value.toString() == customerEmail) {
+                        key = data.key.toString()
                         profile_name.text = data.child("fullName").value.toString()
                         break
                     }
                 }
+            }.addOnFailureListener{
+                Log.e("firebase", "Error getting data", it)
+            }
 
+            //Run when data change
+            ref.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    for (data in snapshot.children) {
+                        if(data.child("email").value.toString() == customerEmail) {
+                            key = data.key.toString()
+                            profile_name.text = data.child("fullName").value.toString()
+                            break
+                        }
+                    }
+                }
                 override fun onCancelled(error: DatabaseError) {
                     Toast.makeText(
                         context,
@@ -90,6 +123,7 @@ class ProfileFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    Log.e("Error load data", error.message)
                 }
             })
 

@@ -6,10 +6,13 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import com.example.orderfoodapp.R
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
@@ -27,6 +30,14 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_edit_profile)
 
         key = intent.getStringExtra("key").toString()
+
+        Log.d("Key",key);
+
+        val edtName= findViewById<TextInputEditText>(R.id.edtName)
+        val edtEmail= findViewById<TextInputEditText>(R.id.edtEmail)
+        val edtGender= findViewById<AutoCompleteTextView>(R.id.edtGender)
+        val edtPhoneNumber= findViewById<TextInputEditText>(R.id.edtPhoneNumber)
+
         val customerEmail = Firebase.auth.currentUser?.email.toString()
 
         //load avatar from fire storage
@@ -45,11 +56,11 @@ class EditProfileActivity : AppCompatActivity() {
 
         val dbRef = FirebaseDatabase.getInstance().getReference("Customer/$key")
         dbRef.get().addOnSuccessListener {
-            edtName.setText(it.child("fullName").value as String)
-            edtEmail.setText(it.child("email").value as String)
-            edtPhoneNumber.setText(it.child("phoneNumber").value as String)
-            edtGender.setText(it.child("gender").value as String)
-            edtDateOfBirth.setText(it.child("dateOfBirth").value as String)
+            edtName.setText(it.child("fullName").value.toString())
+            edtEmail.setText(it.child("email").value.toString())
+            edtPhoneNumber.setText(it.child("phoneNumber").value.toString())
+            edtGender.setText(it.child("gender").value.toString())
+            edtDateOfBirth.setText(it.child("dateOfBirth").value.toString())
         }
 
         back_layout.setOnClickListener() {
@@ -87,7 +98,7 @@ class EditProfileActivity : AppCompatActivity() {
         btnUpdate.setOnClickListener() {
             //update information
             try {
-                val dbUpdate = FirebaseDatabase.getInstance().getReference("Customer/$key")
+                val dbUpdate = FirebaseDatabase.getInstance().getReference("Customer").child(key)
                 dbUpdate.child("fullName").setValue(edtName.text.toString())
                 dbUpdate.child("phoneNumber").setValue(edtPhoneNumber.text.toString())
                 dbUpdate.child("gender").setValue(edtGender.text.toString())

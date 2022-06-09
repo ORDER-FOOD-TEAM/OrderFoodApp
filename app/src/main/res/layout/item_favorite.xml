@@ -39,7 +39,7 @@
                 android:layout_height="match_parent"
                 android:importantForAccessibility="no"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_pizza" />
+                android:src="@drawable/logo_login" />
 
         </com.google.android.material.card.MaterialCardView>
 

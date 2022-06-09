@@ -27,8 +27,8 @@
     <string name="on_sale"><i>ON SALE NOW, HURRY UP!</i></string>
     <string name="comment_something"><i>Comment something...</i></string>
     <string name="about_us_text">
-        Yummy Food is our food delivery platform that makes getting great food from your favorite local restaurants as easy as requesting a ride.<br />
-        Yummy Food app connects you with a broad range of local restaurants and food, so you can order from the full menus of your local favorites whenever you want.<br />
+        Pizza University is our food delivery platform that makes getting great food from your favorite local restaurants as easy as requesting a ride.<br />
+        Pizza University app connects you with a broad range of local restaurants and food, so you can order from the full menus of your local favorites whenever you want.<br />
     </string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="type_something"><i>Type something…</i></string>
@@ -49,13 +49,15 @@
     <string name="confirm_action">Confirm</string>
     <string name="email_address">Email Address</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="facebook_app_id">336674361732048</string>
-    <string name="fb_login_protocol_scheme">fb336674361732048</string>
-    <string name="facebook_client_token">053f2192e5a7989e6d799ba7b59c6a11</string>
+    <string name="facebook_app_id">498967178650384</string>
+    <string name="fb_login_protocol_scheme">fb498967178650384</string>
+    <string name="facebook_client_token">d410a8bc5bd93a030a5eb49631ade6b3</string>
     <string name="new_s_title">New\'s title</string>
     <string name="about_us">About us</string>
     <string name="profile">Profile</string>
     <string name="profile_name">George William</string>
     <string name="profile_email">geogrewilliam@gmail.com</string>
     <string name="log_out">Log out</string>
+    <string name="reset_password">Reset password</string>
+    <string name="name_app">Pizza University</string>
 </resources>

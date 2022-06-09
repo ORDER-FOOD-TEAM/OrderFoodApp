@@ -207,7 +207,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_margin="20sp"
-                            app:srcCompat="@drawable/ic_fast_food" />
+                            app:srcCompat="@drawable/ic_baseline_local_pizza_24" />
 
                     </LinearLayout>
 
@@ -216,8 +216,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:fontFamily="sans-serif-black"
-                        android:text="Western"
-                        android:textSize="16sp"/>
+                        android:text="Pizza"
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -279,7 +279,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_margin="20sp"
-                            app:srcCompat="@drawable/ic_ramen" />
+                            app:srcCompat="@drawable/ic_fast_food" />
 
                     </LinearLayout>
 
@@ -288,7 +288,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
-                        android:text="Asian"
+                        android:text="Hamburger"
                         android:textSize="16sp" />
 
                 </LinearLayout>
