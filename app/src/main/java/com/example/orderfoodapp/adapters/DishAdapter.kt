@@ -133,7 +133,6 @@ class DishAdapter(
 
             dishName_textView.text = curDish.name
             dishRating_textView.text = curDish.rated
-            deliveryTime_textView.text = curDish.deliveryTime
 
             val saleOff = curDish.salePercent.toInt()
             if(saleOff != 0) {

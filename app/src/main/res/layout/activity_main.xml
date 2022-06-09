@@ -41,7 +41,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/login_tab_layout"
             android:layout_width="match_parent"
-            app:tabSelectedTextColor="@color/orange_main"
+            app:tabSelectedTextColor="@color/baemin"
             android:layout_height="match_parent">
         </com.google.android.material.tabs.TabLayout>
 

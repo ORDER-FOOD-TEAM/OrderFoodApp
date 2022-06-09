@@ -156,7 +156,7 @@ class CheckoutActivity : AppCompatActivity() {
         val now = sdf.format(Calendar.getInstance().time)
         val dbRef = FirebaseDatabase.getInstance().getReference("Bill/$key")
         dbRef.child("total").setValue(finalTotal)
-        dbRef.child("status").setValue("done")
+        dbRef.child("status").setValue("Pending")
         dbRef.child("time").setValue(now)
         findProductID()
     }
