@@ -377,7 +377,7 @@ class FoodDetailActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(data in snapshot.children) {
                     if((data.child("customerEmail").value)?.equals(customerEmail) == true &&
-                        data.child("status").value?.equals("pending") == true) {
+                        data.child("status").value?.equals("In cart") == true) {
                         keyBill = data.key.toString()
                         subTotal = data.child("subTotal").value.toString().toDouble()
                         break
@@ -487,7 +487,7 @@ class FoodDetailActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (data in snapshot.children) {
                     if ((data.child("customerEmail").value)?.equals(customerEmail) == true
-                        && data.child("status").value?.equals("done") == true) {
+                        && data.child("status").value?.equals("Accept") == true) {
 
                         val dbRef2 = FirebaseDatabase.getInstance().getReference("Bill/${data.key}/products")
                         dbRef2.get().addOnSuccessListener {
@@ -604,7 +604,7 @@ class FoodDetailActivity : AppCompatActivity() {
 
         val newBill = CreateBillItem(
             customerEmail,
-            "pending",
+            "Pending",
             price
         )
 
@@ -628,7 +628,7 @@ class FoodDetailActivity : AppCompatActivity() {
     private fun createNewBill() {
         val newBill = CreateBillItem(
             customerEmail,
-            "pending",
+            "In cart",
             0.0
         )
         val dbCreate = FirebaseDatabase.getInstance().getReference("Bill")

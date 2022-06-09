@@ -5,7 +5,7 @@
             <corners
                 android:bottomRightRadius="30dp"
                 android:bottomLeftRadius="30dp"/>
-            <solid android:color="@color/orange_main" />
+            <solid android:color="@color/baemin" />
         </shape>
     </item>
 <!--    <item android:drawable="@drawable/img_food" />-->

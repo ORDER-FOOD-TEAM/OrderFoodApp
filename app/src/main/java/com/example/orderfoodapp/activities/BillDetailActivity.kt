@@ -1,5 +1,6 @@
 package com.example.orderfoodapp.activities
 
+import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,7 +37,7 @@ class BillDetailActivity: AppCompatActivity() {
         billDetail_recyclerView.layoutManager = layoutManager
 
         displayProducts()
-        displayPrice()
+        displayBill()
         displayCustomerInfor()
 
         back_layout.setOnClickListener() {
@@ -64,7 +65,7 @@ class BillDetailActivity: AppCompatActivity() {
         }
     }
 
-    private fun displayPrice() {
+    private fun displayBill() {
         val dbRef = FirebaseDatabase.getInstance().getReference("Bill/$id")
         dbRef.get().addOnSuccessListener {
             var subTotal = 0.0
@@ -88,6 +89,22 @@ class BillDetailActivity: AppCompatActivity() {
             total_textView.text = "$$total"
             deliveryFee_textView.text = "$${df.format(deliveryFee)}"
             time_textView.text = formattedDate
+
+            statusBill_textView.text = it.child("status").value.toString()
+
+            when(it.child("status").value as String) {
+                "Pending" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    statusBill_textView.setTextColor(getColor(R.color.yellow))
+                }
+                "Decline" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    statusBill_textView.setTextColor(getColor(R.color.red))
+                }
+
+                else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    statusBill_textView.setTextColor(getColor(R.color.baemin))
+                }
+
+            }
         }
     }
 
@@ -99,9 +116,9 @@ class BillDetailActivity: AppCompatActivity() {
                 for(data in snapshot.children) {
                     if(data.child("email").value as String == customerEmail) {
                         orderID_textView.text = id
-                        customerName_textView.text = data.child("fullName").value as String
-                        phone_textView.text = data.child("phoneNumber").value as String
-                        address_textView.text = data.child("address").value as String
+                        customerName_textView.text = data.child("fullName").value.toString()
+                        phone_textView.text = data.child("phoneNumber").value.toString()
+                        address_textView.text = data.child("address").value.toString()
                     }
                 }
             }

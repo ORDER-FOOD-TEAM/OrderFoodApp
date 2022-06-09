@@ -42,11 +42,11 @@
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/fragment_signup.xml" value="0.136" />
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_bill.xml" value="0.264" />
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_cart.xml" value="0.17255434782608695" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_comment.xml" value="0.11927083333333334" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_dish.xml" value="0.11927083333333334" />
+        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_comment.xml" value="0.4" />
+        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_dish.xml" value="0.4" />
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_favorite.xml" value="0.264" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_news.xml" value="0.4" />
-        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_order_history.xml" value="0.11927083333333334" />
+        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_news.xml" value="0.2" />
+        <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/layout/item_order_history.xml" value="0.2" />
       </map>
     </option>
   </component>
