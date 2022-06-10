@@ -85,31 +85,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:gravity="right">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_clock"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:id="@+id/deliveryTime_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="15 min"
-                    android:textSize="13dp"
-                    android:textColor="@color/plain_black"
-                    android:layout_marginRight="13dp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_gravity="center" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>

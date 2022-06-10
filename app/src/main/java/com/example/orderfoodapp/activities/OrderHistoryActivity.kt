@@ -39,14 +39,14 @@ class OrderHistoryActivity : AppCompatActivity() {
                 orderHistoryAdapter.deleteAll()
                 for (data in snapshot.children) {
                     if ((data.child("customerEmail").value)?.equals(customerEmail) == true
-                        && data.child("status").value?.equals("done") == true) {
+                        && data.child("status").value?.equals("In cart") != true) {
 
                         var total = 0.0
                         val a: Any = data.child("total").value as Any
                         val type = a::class.simpleName
                         if(type == "Long" || type == "Double")
                             total = a.toString().toDouble()
-
+                        val status = data.child("status").value.toString();
                         val dbRef2 = FirebaseDatabase.getInstance().getReference("Bill/${data.key}/products")
                         dbRef2.get().addOnSuccessListener {
                             val count = it.childrenCount.toInt()
@@ -58,7 +58,8 @@ class OrderHistoryActivity : AppCompatActivity() {
                                 data.key.toString(),
                                 total,
                                 count,
-                                formattedDate
+                                formattedDate,
+                                status
                             )
                             orderHistoryAdapter.addOrder(order)
                         }

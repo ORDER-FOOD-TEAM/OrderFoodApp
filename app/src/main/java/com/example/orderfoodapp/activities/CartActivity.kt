@@ -59,7 +59,7 @@ class CartActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(data in snapshot.children) {
                     if((data.child("customerEmail").value)?.equals(customerEmail) == true &&
-                        data.child("status").value?.equals("pending") == true) {
+                        data.child("status").value?.equals("In cart") == true) {
 
                         isExistPendingBill = true
                         key = data.key.toString()
