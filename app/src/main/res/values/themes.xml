@@ -17,6 +17,6 @@
     <style name="MaterialCalendarTheme" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
         <!-- just override the colors used in the default style -->
         <item name="colorOnPrimary">@color/white</item>
-        <item name="colorPrimary">@color/orange_main</item>
+        <item name="colorPrimary">@color/baemin</item>
     </style>
 </resources>

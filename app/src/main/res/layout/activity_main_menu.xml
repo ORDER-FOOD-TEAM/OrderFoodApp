@@ -23,7 +23,7 @@
         android:layout_marginBottom="75dp"
         android:layout_marginRight="20sp"
         android:layout_gravity="bottom|right"
-        app:backgroundTint="@color/orange_main"
+        app:backgroundTint="@color/baemin"
         app:maxImageSize="30dp"
         app:tint="@color/white"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"/>
@@ -36,7 +36,7 @@
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_corner_navbottombar"
-        app:itemTextColor="@color/orange_main"
+        app:itemTextColor="@color/baemin"
         app:itemIconTint="@color/icon_color_bottomnavbar"
         app:menu="@menu/bottom_app_bar" />
 

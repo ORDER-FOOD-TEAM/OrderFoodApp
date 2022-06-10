@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
 import com.example.orderfoodapp.activities.*
+import com.example.orderfoodapp.models.OrderHistory
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth

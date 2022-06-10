@@ -12,7 +12,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="$0.00"
-        android:textColor="@color/orange_main"
+        android:textColor="@color/baemin"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deliveryFee_textView" />
@@ -48,7 +48,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Total"
-        android:textColor="@color/orange_main"
+        android:textColor="@color/baemin"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView23" />
@@ -92,7 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:text="@string/name_app"
-        android:textColor="@color/orange_main"
+        android:textColor="@color/baemin"
         android:textSize="35sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
