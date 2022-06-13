@@ -470,7 +470,7 @@ class MainMenuFragment : Fragment() {
             providerLon = address.longitude
         }
         catch (e: Exception) {
-            Toast.makeText(context, "Issue with gps, try later!", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Issue with gps, try later!", Toast.LENGTH_SHORT).show()
         }
     }
 

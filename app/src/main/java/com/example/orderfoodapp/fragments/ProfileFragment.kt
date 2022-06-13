@@ -107,27 +107,27 @@ class ProfileFragment : Fragment() {
             }
 
             //Run when data change
-            ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (data in snapshot.children) {
-                        if (data.child("email").value.toString() == customerEmail) {
-                            key = data.key.toString()
-                            profile_name.text = data.child("fullName").value.toString()
-                            break
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        context,
-                        "Cannot load customer's data, please try again later!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    Log.e("Error load data", error.message)
-                }
-            })
+//            ref.addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    for (data in snapshot.children) {
+//                        if (data.child("email").value.toString() == customerEmail) {
+//                            key = data.key.toString()
+//                            profile_name.text = data.child("fullName").value.toString()
+//                            break
+//                        }
+//                    }
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    Toast.makeText(
+//                        context,
+//                        "Cannot load customer's data, please try again later!",
+//                        Toast.LENGTH_SHORT
+//                    )
+//                        .show()
+//                    Log.e("Error load data", error.message)
+//                }
+//            })
 
             val imgName = customerEmail.replace(".", "_")
             val storageRef = FirebaseStorage.getInstance().getReference("avatar_image/$imgName.jpg")
