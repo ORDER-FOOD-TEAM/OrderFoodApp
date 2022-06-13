@@ -90,6 +90,8 @@ class BillDetailActivity: AppCompatActivity() {
             deliveryFee_textView.text = "$${df.format(deliveryFee)}"
             time_textView.text = formattedDate
 
+            address_textView.text = it.child("address").value.toString()
+
             statusBill_textView.text = it.child("status").value.toString()
 
             when(it.child("status").value as String) {
@@ -103,7 +105,6 @@ class BillDetailActivity: AppCompatActivity() {
                 else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     statusBill_textView.setTextColor(getColor(R.color.baemin))
                 }
-
             }
         }
     }
@@ -118,7 +119,7 @@ class BillDetailActivity: AppCompatActivity() {
                         orderID_textView.text = id
                         customerName_textView.text = data.child("fullName").value.toString()
                         phone_textView.text = data.child("phoneNumber").value.toString()
-                        address_textView.text = data.child("address").value.toString()
+
                     }
                 }
             }

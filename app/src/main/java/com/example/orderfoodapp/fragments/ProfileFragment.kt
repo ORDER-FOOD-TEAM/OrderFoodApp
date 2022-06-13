@@ -14,6 +14,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.orderfoodapp.R
 import com.example.orderfoodapp.activities.*
+import com.example.orderfoodapp.models.OrderHistory
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
@@ -40,7 +41,7 @@ private const val ARG_PARAM2 = "param2"
  */
 class ProfileFragment : Fragment() {
     private var key: String? = ""
-    private lateinit var profile_mail : TextView;
+    private lateinit var profile_mail: TextView;
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,11 +50,11 @@ class ProfileFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-        val cvEditProfile=view.findViewById<CardView>(R.id.cvEditProfile)
-        val cvPaymentMethod=view.findViewById<CardView>(R.id.cvPaymentMethod)
-        val cvOrderHistory=view.findViewById<CardView>(R.id.cvOrderHistory)
-        val cvAboutUs=view.findViewById<CardView>(R.id.cvAboutUs)
-        val cvLogout=view.findViewById<CardView>(R.id.cvLogout)
+        val cvEditProfile = view.findViewById<CardView>(R.id.cvEditProfile)
+        val cvPaymentMethod = view.findViewById<CardView>(R.id.cvPaymentMethod)
+        val cvOrderHistory = view.findViewById<CardView>(R.id.cvOrderHistory)
+        val cvAboutUs = view.findViewById<CardView>(R.id.cvAboutUs)
+        val cvLogout = view.findViewById<CardView>(R.id.cvLogout)
 
         profile_mail = view.findViewById(R.id.profile_mail)
 
@@ -61,7 +62,7 @@ class ProfileFragment : Fragment() {
 
         cvEditProfile.setOnClickListener {
             val intent = Intent(context, EditProfileActivity::class.java)
-            intent.putExtra("key",key)
+            intent.putExtra("key", key)
             startActivity(intent)
         }
         cvPaymentMethod.setOnClickListener {
@@ -95,44 +96,46 @@ class ProfileFragment : Fragment() {
             //Get data first time
             ref.get().addOnSuccessListener {
                 for (data in it.children) {
-                    if(data.child("email").value.toString() == customerEmail) {
+                    if (data.child("email").value.toString() == customerEmail) {
                         key = data.key.toString()
                         profile_name.text = data.child("fullName").value.toString()
                         break
                     }
                 }
-            }.addOnFailureListener{
+            }.addOnFailureListener {
                 Log.e("firebase", "Error getting data", it)
             }
 
             //Run when data change
-            ref.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (data in snapshot.children) {
-                        if(data.child("email").value.toString() == customerEmail) {
-                            key = data.key.toString()
-                            profile_name.text = data.child("fullName").value.toString()
-                            break
-                        }
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        context,
-                        "Cannot load customer's data, please try again later!",
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
-                    Log.e("Error load data", error.message)
-                }
-            })
+//            ref.addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    for (data in snapshot.children) {
+//                        if (data.child("email").value.toString() == customerEmail) {
+//                            key = data.key.toString()
+//                            profile_name.text = data.child("fullName").value.toString()
+//                            break
+//                        }
+//                    }
+//                }
+//
+//                override fun onCancelled(error: DatabaseError) {
+//                    Toast.makeText(
+//                        context,
+//                        "Cannot load customer's data, please try again later!",
+//                        Toast.LENGTH_SHORT
+//                    )
+//                        .show()
+//                    Log.e("Error load data", error.message)
+//                }
+//            })
 
             val imgName = customerEmail.replace(".", "_")
             val storageRef = FirebaseStorage.getInstance().getReference("avatar_image/$imgName.jpg")
             val localFile = File.createTempFile("tempfile", ".jpg")
             storageRef.getFile(localFile).addOnSuccessListener {
                 val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-                profile_picture.setImageBitmap(bitmap)
+                if (bitmap != null)
+                    profile_picture.setImageBitmap(bitmap)
             }
         }
         //Check if user is not login -> go to login screen

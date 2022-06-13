@@ -158,6 +158,7 @@ class CheckoutActivity : AppCompatActivity() {
         dbRef.child("total").setValue(finalTotal)
         dbRef.child("status").setValue("Pending")
         dbRef.child("time").setValue(now)
+        dbRef.child("address").setValue(address_textView.text)
         findProductID()
     }
 

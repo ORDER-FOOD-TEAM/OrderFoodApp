@@ -6,4 +6,5 @@ data class OrderHistory(
     var num: Int,
     var time: String,
     var status: String,
+    var address: String
 )
