@@ -499,8 +499,6 @@ class FoodDetailActivity : AppCompatActivity() {
                             }
                         }
                     }
-                    else
-                        Toast.makeText(this@FoodDetailActivity, "Failed!", Toast.LENGTH_SHORT).show()
                 }
             }
 
