@@ -58,6 +58,9 @@ class OrderHistoryAdapter(
                 "Decline" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     color = context.getColor(R.color.red)
                 }
+                "Done" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    color = context.getColor(R.color.green)
+                }
 
                 else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     color = context.getColor(R.color.baemin)

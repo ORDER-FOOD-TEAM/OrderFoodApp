@@ -101,6 +101,9 @@ class BillDetailActivity: AppCompatActivity() {
                 "Decline" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     statusBill_textView.setTextColor(getColor(R.color.red))
                 }
+                "Done" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    statusBill_textView.setTextColor(getColor(R.color.green))
+                }
 
                 else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     statusBill_textView.setTextColor(getColor(R.color.baemin))

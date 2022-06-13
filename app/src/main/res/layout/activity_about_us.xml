@@ -41,7 +41,7 @@
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/about_us_image"
-        android:layout_width="414dp"
+        android:layout_width="match_parent"
         android:layout_height="215dp"
         android:src="@drawable/about_us_image"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
+            android:padding="10dp"
             android:fontFamily="@font/poppins_light"
             android:text="@string/about_us_text"
             android:textColor="#000000"

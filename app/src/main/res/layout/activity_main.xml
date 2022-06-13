@@ -42,7 +42,9 @@
             android:id="@+id/login_tab_layout"
             android:layout_width="match_parent"
             app:tabSelectedTextColor="@color/baemin"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:tabIndicatorColor="@color/baemin"
+            >
         </com.google.android.material.tabs.TabLayout>
 
         <androidx.viewpager2.widget.ViewPager2

@@ -246,7 +246,7 @@ class FoodDetailActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please choose a food size!", Toast.LENGTH_LONG).show()
         }
 
-        buyNow_button.setOnClickListener() {
+        image_buy_now.setOnClickListener() {
             if(amount_text.text.isNotEmpty() && sizeChosen != "none") {
                 createNewBillBuyNow(curDish!!)
                 val intent = Intent(this, CheckoutActivity::class.java)

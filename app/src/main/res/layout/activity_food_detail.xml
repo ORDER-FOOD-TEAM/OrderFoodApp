@@ -102,7 +102,9 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_share"
-                    app:tint="@color/blue" />
+                    app:tint="@color/blue"
+                    android:visibility="invisible"
+                    />
 
                 <ImageView
                     android:id="@+id/ic_heart"
@@ -354,6 +356,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/description_textView" />
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/sameProvider_textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -366,6 +369,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/recommended_textView" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="invisible"
                     android:id="@+id/sameProvider_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -378,16 +382,17 @@
                     android:layout_marginStart="32dp"
                     android:fontFamily="@font/poppins_light"
                     android:text="Same Category"
-                    android:textSize="17dp"
+                    android:textSize="15dp"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/sameProvider_recyclerView" />
+                    app:layout_constraintTop_toBottomOf="@+id/recommended_textView" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/sameCategory_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/sameCategory_textView" />
+                    app:layout_constraintTop_toBottomOf="@+id/sameCategory_textView"
+                    tools:layout_editor_absoluteX="0dp" />
 
                 <TextView
                     android:id="@+id/rating_comment_textView"
@@ -575,19 +580,18 @@
                 android:layout_marginStart="3dp"
                 android:layout_marginLeft="3dp"
                 android:text="7.68"
-                android:textColor="#FF7000"
+                android:textColor="@color/baemin"
                 android:textSize="25dp"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/price_text" />
 
             <TextView
                 android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="11dp"
+                android:layout_height="26dp"
                 android:layout_marginStart="24dp"
-                android:layout_marginLeft="24dp"
                 android:text="$"
-                android:textColor="#FF7000"
+                android:textColor="@color/baemin"
                 android:textSize="25dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/price_text" />
@@ -607,14 +611,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/image_buy_now"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
+                android:paddingHorizontal="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/image_buy_now"
+                android:background="@drawable/btn_login"
+                android:textColor="@color/white"
+                android:text="Buy Now"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -632,29 +639,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
-                android:id="@+id/image_add_to_cart"
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/addToCart_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 android:layout_marginEnd="10dp"
+                android:paddingHorizontal="20dp"
+                android:text="Add To Cart"
+                android:textColor="@color/baemin"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/image_add_to_cart"
+                android:background="@drawable/btn_add_to_card"
                 app:layout_constraintEnd_toStartOf="@id/image_buy_now"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/addToCart_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="40dp"
-                android:layout_marginRight="128dp"
-                android:fontFamily="@font/poppins_light"
-                android:text="Add to cart"
-                android:textColor="#FF7A00"
-                android:textSize="18dp"
-                app:layout_constraintEnd_toEndOf="@id/image_buy_now"
-                app:layout_constraintTop_toTopOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.bottomnavigation.BottomNavigationView>

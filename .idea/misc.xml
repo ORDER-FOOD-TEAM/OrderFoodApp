@@ -3,8 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/drawable/btn_add_to_card.xml" value="0.164" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/drawable/btn_login.xml" value="0.186" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_about_us.xml" value="0.240625" />
         <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_bill_detail.xml" value="0.28020833333333334" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.2824074074074074" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_fill_information.xml" value="0.2824074074074074" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_food_detail.xml" value="0.33" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_main.xml" value="0.240625" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_main_menu.xml" value="0.15572916666666667" />
         <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/activity_order_history.xml" value="0.22" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/dialog_loading_menu.xml" value="0.2824074074074074" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/fragment_login.xml" value="0.240625" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/fragment_main_menu.xml" value="0.15572916666666667" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/fragment_search.xml" value="0.15572916666666667" />
+        <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/fragment_signup.xml" value="0.240625" />
         <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/item_bill.xml" value="0.28020833333333334" />
         <entry key="..\:/HK2/OrderFoodApp/app/src/main/res/layout/item_order_history.xml" value="0.33" />
         <entry key="..\:/Workspace/Android/Java/OrderFoodApp/app/src/main/res/drawable/bg_borderless_bottom_corners.xml" value="0.2465" />
